@@ -161,23 +161,23 @@ class LocalLLMEngine:
         # -------------------------------------------------------------
         # Authoritative Confirmation & Lead Time Determination
         # -------------------------------------------------------------
-        if is_breach or composite_risk >= 0.80 or (met_state == "EXTREME_DELUGE" and choke >= 0.70):
+        if is_breach or composite_risk >= 0.70 or (met_state == "EXTREME_DELUGE" and choke >= 0.70):
             confirmed = True
             flood_status = "CONFIRMED_FLOOD_DISASTER"
-            prob_pct = max(95.0, round(composite_risk * 100, 1))
+            prob_pct = max(88.0, round(composite_risk * 100, 1))
             severity = "CRITICAL"
             lead_time = "IMMEDIATE (< 2 Hours) -- ACTIVE DELUGE / INUNDATION"
             vulnerable_zones = candidate_vulnerabilities[:4]
             headline = f"CRITICAL FLOOD DISASTER CONFIRMED along River {river} in {district} district."
-        elif is_warning or composite_risk >= 0.50 or (rain_24h >= 80.0 and abs(danger_buf) <= 0.8):
+        elif is_warning or composite_risk >= 0.45 or (rain_24h >= 80.0 and abs(danger_buf) <= 0.8):
             confirmed = True
             flood_status = "HIGH_RISK_SURGE_IMMINENT"
-            prob_pct = max(75.0, round(composite_risk * 100, 1))
+            prob_pct = max(50.0, round(composite_risk * 100, 1))
             severity = "HIGH"
             lead_time = "3 TO 6 HOURS -- PRE-DISASTER CREST APPROACHING"
             vulnerable_zones = candidate_vulnerabilities[:3]
             headline = f"HIGH-RISK FLOOD CREST IMMINENT for {district} river corridor ({stn_name})."
-        elif composite_risk >= 0.20 or rain_1h >= 15.0 or waterlogging >= 20.0:
+        elif composite_risk >= 0.18 or rain_1h >= 15.0 or waterlogging >= 20.0:
             confirmed = False
             flood_status = "ELEVATED_WATCH_ADVISORY"
             prob_pct = round(composite_risk * 100, 1)
@@ -188,7 +188,7 @@ class LocalLLMEngine:
         else:
             confirmed = False
             flood_status = "NO_FLOOD_NORMAL_CONDITIONS"
-            prob_pct = min(10.0, round(composite_risk * 100, 1))
+            prob_pct = round(max(1.5, composite_risk * 100, 1), 1)
             severity = "LOW"
             lead_time = "NO FLOOD THREAT ANTICIPATED OVER NEXT 48 HOURS"
             vulnerable_zones = ["None -- Nominal River Channel Capacity"]

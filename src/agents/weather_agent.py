@@ -74,17 +74,25 @@ class WeatherAgent(BaseAutonomousAIAgent):
         ]
 
         # 3. Deliberate Risk & Intentions
-        if ml_pred:
-            risk_score = ml_pred["ml_risk_score"]
-            risk_level = ml_pred["ml_predicted_level"]
-        else:
-            risk_score = 0.85 if (hourly_rain >= 50.0 or cum_24h >= 150.0) else 0.05
-            risk_level = "CRITICAL" if risk_score >= 0.75 else "LOW"
-
-        # Safety Veto
         if hourly_rain >= 50.0 or cum_24h >= 150.0:
+            risk_score = 0.92 + min(0.07, (hourly_rain / 100.0) * 0.05)
             risk_level = "CRITICAL"
-            risk_score = max(risk_score, 0.95)
+        elif hourly_rain >= 20.0 or cum_24h >= 60.0:
+            risk_score = 0.60 + min(0.25, (cum_24h / 150.0) * 0.25)
+            risk_level = "HIGH"
+        elif hourly_rain >= 5.0 or cum_24h >= 15.0:
+            risk_score = 0.25 + min(0.25, (cum_24h / 60.0) * 0.25)
+            risk_level = "MODERATE"
+        else:
+            # Dynamic continuous baseline from atmospheric moisture and pressure depression
+            hum_factor = max(0.0, (humidity - 40.0) / 60.0) * 0.06
+            press_factor = max(0.0, (1014.0 - pressure) / 20.0) * 0.05
+            gust_factor = min(0.04, (wind_gusts / 60.0) * 0.04)
+            rain_factor = min(0.05, (cum_24h / 15.0) * 0.05)
+            
+            continuous_score = max(0.015, hum_factor + press_factor + gust_factor + rain_factor + 0.01)
+            risk_score = max(continuous_score, ml_pred["ml_risk_score"]) if ml_pred and ml_pred["ml_predicted_level"] != "LOW" else continuous_score
+            risk_level = "MODERATE" if risk_score >= 0.18 else "LOW"
 
         dispatched_count = 0
         self.intentions = []

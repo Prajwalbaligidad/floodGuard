@@ -84,27 +84,27 @@ class FloodAgent(BaseAutonomousAIAgent):
             risk_score = 0.95 if (danger_level > 0 and water_level >= danger_level) else (0.65 if (warning_level > 0 and water_level >= warning_level) else 0.05)
             risk_level = "CRITICAL" if risk_score >= 0.75 else "LOW"
 
-        # Autonomous Physical Hydrologic Guardrails
-        is_physically_safe = (
-            (danger_level > 0 and (danger_level - water_level) >= 0.8) and
-            (warning_level > 0 and (warning_level - water_level) >= 0.3) and
-            waterlogging < 15.0 and
-            rise_3h < 0.25 and
-            choke_ratio < 0.50
-        )
-
-        if is_physically_safe:
-            risk_score = min(risk_score, 0.05)
-            risk_level = "LOW"
-            critical_flags = []
-            self.beliefs["critical_flags"] = []
-        elif danger_level > 0 and water_level >= danger_level:
+        # Continuous Hydrological River & Inundation Physics
+        if danger_level > 0 and water_level >= danger_level:
             risk_level = "CRITICAL"
-            risk_score = max(risk_score, 0.95)
+            risk_score = max(risk_score, 0.95 + min(0.04, max(0.0, (water_level - danger_level) * 0.05)))
         elif warning_level > 0 and water_level >= warning_level:
+            risk_level = "HIGH"
+            risk_score = max(risk_score, 0.55 + min(0.25, ((water_level - warning_level) / max(0.1, danger_level - warning_level)) * 0.25))
+        else:
+            # Physics-based baseline derived from live discharge rate & stage proximity
+            discharge_factor = min(0.22, (discharge / 5000.0) * 0.22)
+            buffer_to_warn = max(0.1, warning_level - water_level) if warning_level > 0 else 2.0
+            stage_factor = min(0.08, max(0.0, (1.5 - buffer_to_warn) / 1.5) * 0.08)
+            waterlog_factor = min(0.06, (waterlogging / 30.0) * 0.06)
+            rise_factor = min(0.08, max(0.0, rise_3h) * 0.20)
+            
+            continuous_score = max(0.02, discharge_factor + stage_factor + waterlog_factor + rise_factor + 0.015)
+            risk_score = max(continuous_score, risk_score if risk_level != "LOW" else continuous_score)
+            risk_level = "MODERATE" if risk_score >= 0.18 else "LOW"
             if risk_level == "LOW":
-                risk_level = "MODERATE"
-                risk_score = max(risk_score, 0.40)
+                critical_flags = []
+                self.beliefs["critical_flags"] = []
 
         dispatched_count = 0
         self.intentions = []

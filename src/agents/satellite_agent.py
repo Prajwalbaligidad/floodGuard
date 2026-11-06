@@ -76,13 +76,19 @@ class SatelliteAgent(BaseAutonomousAIAgent):
         ]
 
         # 3. Deliberate Risk & Intentions
-        if ml_pred:
-            risk_score = ml_pred["ml_risk_score"]
-            risk_level = ml_pred["ml_predicted_level"]
+        if sar_db <= -18.0 or extent_change_pct >= 50.0:
+            risk_score = 0.90
+            risk_level = "CRITICAL"
+        elif sar_db <= -14.0 or extent_change_pct >= 20.0:
+            risk_score = 0.55
+            risk_level = "HIGH"
         else:
-            score = 0.95 if (extent_change_pct >= 80.0 or (ndwi >= 0.35 and sar_db <= -20.0)) else 0.08
-            risk_score = score
-            risk_level = "CRITICAL" if score >= 0.75 else "LOW"
+            # Normal baseline SAR backscatter sensitivity (-7 to -13 dB)
+            sar_factor = max(0.0, min(0.08, abs(sar_db + 7.0) / 10.0 * 0.08))
+            ndwi_factor = max(0.0, (ndwi + 0.2) / 0.5) * 0.04
+            continuous_score = max(0.015, sar_factor + ndwi_factor + 0.01)
+            risk_score = max(continuous_score, ml_pred["ml_risk_score"]) if ml_pred and ml_pred["ml_predicted_level"] != "LOW" else continuous_score
+            risk_level = "MODERATE" if risk_score >= 0.18 else "LOW"
 
         # Autonomous Spaceborne Ground Truth Veto
         if sar_db <= -22.0 and extent_change_pct >= 80.0:

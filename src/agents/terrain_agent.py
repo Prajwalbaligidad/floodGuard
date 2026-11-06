@@ -70,25 +70,24 @@ class TerrainAgent(BaseAutonomousAIAgent):
         ]
 
         # 3. Deliberate Risk & Intentions
-        if ml_pred:
-            risk_score = ml_pred["ml_risk_score"]
-            risk_level = ml_pred["ml_predicted_level"]
-        else:
-            score = 0.85 if (surge_index >= 2.0 or (cum_24h_rain >= 80.0 and infilt_cap <= 6.0)) else 0.05
-            risk_score = score
-            risk_level = "CRITICAL" if score >= 0.70 else "LOW"
-
-        # Physical dry weather sanity check
-        if cum_24h_rain < 5.0 and surge_index < 0.5:
-            risk_score = min(risk_score, 0.05)
-            risk_level = "LOW"
-            critical_flags = []
-            self.beliefs["critical_flags"] = []
-
-        # Autonomous Runoff Surge Escalation
-        if surge_index >= 2.0 and risk_level == "LOW":
+        if surge_index >= 2.0 or (cum_24h_rain >= 80.0 and infilt_cap <= 6.0):
+            risk_score = 0.88
+            risk_level = "CRITICAL"
+        elif surge_index >= 1.0 or (cum_24h_rain >= 40.0 and slope < 2.0):
+            risk_score = 0.55
             risk_level = "HIGH"
-            risk_score = max(risk_score, 0.75)
+        else:
+            # Low elevation (< 30m) delta/coastal terrain has poor gravity outflow
+            elev_factor = max(0.0, min(0.12, (120.0 - min(120.0, elevation)) / 120.0 * 0.12))
+            slope_factor = max(0.0, min(0.08, (5.0 - min(5.0, slope)) / 5.0 * 0.08))
+            twi_factor = min(0.05, (twi / 15.0) * 0.05)
+            
+            continuous_score = max(0.02, elev_factor + slope_factor + twi_factor + 0.01)
+            risk_score = max(continuous_score, ml_pred["ml_risk_score"]) if ml_pred and ml_pred["ml_predicted_level"] != "LOW" else continuous_score
+            risk_level = "MODERATE" if risk_score >= 0.18 else "LOW"
+            if risk_level == "LOW":
+                critical_flags = []
+                self.beliefs["critical_flags"] = []
 
         dispatched_count = 0
         self.intentions = []

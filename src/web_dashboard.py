@@ -273,7 +273,7 @@ def evaluate_location(location_name: str, scenario: str = "live", lat_override: 
             "severity": severity,
             "color_hex": color_hex,
             "composite_risk_score": round(risk, 3),
-            "composite_risk_pct": int(risk * 100),
+            "composite_risk_pct": int(round(fused_assessment.flood_probability_pct)),
             "composite_confidence": int(fused_assessment.composite_confidence * 100),
             "flood_confirmed": fused_assessment.flood_occurrence_confirmed,
             "flood_event_status": fused_assessment.flood_event_status,
