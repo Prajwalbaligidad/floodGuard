@@ -65,7 +65,7 @@ def evaluate_location(location_name: str, scenario: str = "live", lat_override: 
 
     if cache_key in EVAL_CACHE:
         cached_data, cached_time = EVAL_CACHE[cache_key]
-        if now_ts - cached_time < 300: # 5 minute validity
+        if now_ts - cached_time < 15: # 15 second fast cache for iframes
             return cached_data
 
     live_service = LiveDataService()
@@ -109,6 +109,7 @@ def evaluate_location(location_name: str, scenario: str = "live", lat_override: 
         district=district,
         state=state,
         river_name=river,
+        default_elevation=geo.get("elevation", 50.0),
         convective_surge_mode=surge_mode
     )
 

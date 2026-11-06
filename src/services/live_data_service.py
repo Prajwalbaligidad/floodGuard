@@ -161,6 +161,7 @@ class LiveDataService:
         district: str = "Regional District",
         state: str = "Regional State",
         river_name: str = "",
+        default_elevation: float = 50.0,
         convective_surge_mode: Optional[str] = None
     ) -> Tuple[Dict[str, Any], Dict[str, Any]]:
         """
@@ -231,7 +232,7 @@ class LiveDataService:
             "longitude": f"{lon},{lon},{lon},{lon+d_lon},{lon-d_lon}"
         }
 
-        elevation_m = 50.0
+        elevation_m = float(default_elevation or 50.0)
         slope_deg = 1.8
         try:
             e_res = self.session.get(elevation_url, params=elev_params, timeout=self.timeout)

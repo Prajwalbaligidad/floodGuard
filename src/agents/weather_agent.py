@@ -84,14 +84,14 @@ class WeatherAgent(BaseAutonomousAIAgent):
             risk_score = 0.25 + min(0.25, (cum_24h / 60.0) * 0.25)
             risk_level = "MODERATE"
         else:
-            # Dynamic continuous baseline from atmospheric moisture and pressure depression
-            hum_factor = max(0.0, (humidity - 40.0) / 60.0) * 0.06
-            press_factor = max(0.0, (1014.0 - pressure) / 20.0) * 0.05
-            gust_factor = min(0.04, (wind_gusts / 60.0) * 0.04)
-            rain_factor = min(0.05, (cum_24h / 15.0) * 0.05)
+            # Dynamic continuous baseline directly driven by Open-Meteo live parameters
+            r_factor = (cum_24h / 120.0) * 0.40 + (hourly_rain / 30.0) * 0.25
+            hum_factor = (humidity / 100.0) * 0.18
+            gust_factor = (wind_gusts / 50.0) * 0.10
+            press_factor = min(0.08, max(0.0, (1014.0 - pressure) / 25.0) * 0.08)
             
-            continuous_score = max(0.015, hum_factor + press_factor + gust_factor + rain_factor + 0.01)
-            risk_score = max(continuous_score, ml_pred["ml_risk_score"]) if ml_pred and ml_pred["ml_predicted_level"] != "LOW" else continuous_score
+            continuous_score = min(0.95, r_factor + hum_factor + gust_factor + press_factor + 0.02)
+            risk_score = round(max(0.02, continuous_score), 3)
             risk_level = "MODERATE" if risk_score >= 0.18 else "LOW"
 
         dispatched_count = 0

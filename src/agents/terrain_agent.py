@@ -77,13 +77,12 @@ class TerrainAgent(BaseAutonomousAIAgent):
             risk_score = 0.55
             risk_level = "HIGH"
         else:
-            # Low elevation (< 30m) delta/coastal terrain has poor gravity outflow
-            elev_factor = max(0.0, min(0.12, (120.0 - min(120.0, elevation)) / 120.0 * 0.12))
+            # Low elevation delta/coastal terrain has high inundation vulnerability
+            elev_factor = max(0.03, min(0.35, (150.0 - min(150.0, elevation)) / 150.0 * 0.30 + 0.05))
             slope_factor = max(0.0, min(0.08, (5.0 - min(5.0, slope)) / 5.0 * 0.08))
             twi_factor = min(0.05, (twi / 15.0) * 0.05)
             
-            continuous_score = max(0.02, elev_factor + slope_factor + twi_factor + 0.01)
-            risk_score = max(continuous_score, ml_pred["ml_risk_score"]) if ml_pred and ml_pred["ml_predicted_level"] != "LOW" else continuous_score
+            risk_score = round(max(0.04, min(0.65, elev_factor + slope_factor + twi_factor)), 3)
             risk_level = "MODERATE" if risk_score >= 0.18 else "LOW"
             if risk_level == "LOW":
                 critical_flags = []

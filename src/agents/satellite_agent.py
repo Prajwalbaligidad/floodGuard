@@ -83,11 +83,12 @@ class SatelliteAgent(BaseAutonomousAIAgent):
             risk_score = 0.55
             risk_level = "HIGH"
         else:
-            # Normal baseline SAR backscatter sensitivity (-7 to -13 dB)
+            # Cloud cover proxy and surface moisture reflectivity
+            cloud_factor = (cloud_pct / 100.0) * 0.15
             sar_factor = max(0.0, min(0.08, abs(sar_db + 7.0) / 10.0 * 0.08))
             ndwi_factor = max(0.0, (ndwi + 0.2) / 0.5) * 0.04
-            continuous_score = max(0.015, sar_factor + ndwi_factor + 0.01)
-            risk_score = max(continuous_score, ml_pred["ml_risk_score"]) if ml_pred and ml_pred["ml_predicted_level"] != "LOW" else continuous_score
+            
+            risk_score = round(max(0.03, cloud_factor + sar_factor + ndwi_factor + 0.03), 3)
             risk_level = "MODERATE" if risk_score >= 0.18 else "LOW"
 
         # Autonomous Spaceborne Ground Truth Veto
