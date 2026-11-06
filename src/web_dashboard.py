@@ -310,6 +310,14 @@ def evaluate_location(location_name: str, scenario: str = "live", lat_override: 
 # -------------------------------------------------------------
 # REST & Map Embedding Endpoints
 # -------------------------------------------------------------
+@app.route("/api/version", methods=["GET"])
+def api_version():
+    return jsonify({
+        "status": "online",
+        "version": "2.2.0-continuous-scores",
+        "engine": "Physics-Grounded Multi-Agent Hydro-Meteorological Evaluation"
+    })
+
 @app.route("/api/evaluate", methods=["GET"])
 def api_evaluate():
     """Evaluates risk via JSON for any query and scenario."""
