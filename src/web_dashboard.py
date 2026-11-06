@@ -318,6 +318,27 @@ def api_version():
         "engine": "Physics-Grounded Multi-Agent Hydro-Meteorological Evaluation"
     })
 
+@app.route("/api/test_meteo", methods=["GET"])
+def api_test_meteo():
+    import requests
+    lat = float(request.args.get("lat", 28.6139))
+    lon = float(request.args.get("lon", 77.2090))
+    url = "https://api.open-meteo.com/v1/forecast"
+    params = {
+        "latitude": lat,
+        "longitude": lon,
+        "current": "precipitation,rain,relative_humidity_2m,surface_pressure,wind_speed_10m,wind_gusts_10m,cloud_cover"
+    }
+    headers = {"User-Agent": "FloodGuardAI-CitizenDisasterMonitor/2.0 (student-academic-research; contact: civil-defense@floodguard.in)"}
+    try:
+        r = requests.get(url, params=params, headers=headers, timeout=8)
+        return jsonify({
+            "status_code": r.status_code,
+            "response": r.json() if r.status_code == 200 else r.text[:300]
+        })
+    except Exception as e:
+        return jsonify({"error": str(e), "type": type(e).__name__})
+
 @app.route("/api/evaluate", methods=["GET"])
 def api_evaluate():
     """Evaluates risk via JSON for any query and scenario."""
