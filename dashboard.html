@@ -96,7 +96,7 @@
             
             <!-- City Search Box Form -->
             <form method="GET" action="/" id="searchForm" class="w-full lg:w-5/12 flex items-center gap-2" onsubmit="handleSearchSubmit(event)">
-                <input type="hidden" name="scenario" id="formScenario" value="{{ init_scenario }}" />
+                <input type="hidden" name="scenario" id="formScenario" value="live" />
                 <div class="relative flex-1">
                     <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                         🔍
@@ -120,38 +120,21 @@
                 </button>
             </form>
 
-            <!-- Scenario Stress Testing Selector -->
-            <div class="w-full lg:w-auto flex items-center gap-2 overflow-x-auto pb-1 lg:pb-0 text-xs">
-                <span class="text-slate-400 font-bold uppercase tracking-wider text-[11px] shrink-0 mr-1">Condition Mode:</span>
-                <button 
-                    onclick="setScenario('live')" 
-                    id="btnScenarioLive"
-                    class="scenario-pill px-3.5 py-1.5 rounded-lg border font-bold transition-all shrink-0 flex items-center gap-1.5 bg-emerald-500/20 text-emerald-300 border-emerald-500/40 shadow-sm">
-                    <span>🟢 Real Live Telemetry</span>
-                </button>
-                <button 
-                    onclick="setScenario('watch')" 
-                    id="btnScenarioWatch"
-                    class="scenario-pill px-3.5 py-1.5 rounded-lg border font-bold transition-all shrink-0 flex items-center gap-1.5 bg-slate-800 text-slate-400 border-slate-700 hover:text-white">
-                    <span>🟡 Elevated Watch</span>
-                </button>
-                <button 
-                    onclick="setScenario('surge')" 
-                    id="btnScenarioSurge"
-                    class="scenario-pill px-3.5 py-1.5 rounded-lg border font-bold transition-all shrink-0 flex items-center gap-1.5 bg-slate-800 text-slate-400 border-slate-700 hover:text-white">
-                    <span>🔴 Severe Deluge Surge</span>
-                </button>
+            <!-- Real-Time Telemetry Operational Status -->
+            <div class="flex items-center gap-2 text-xs font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-3.5 py-2 rounded-xl shadow-inner shrink-0">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>Real-Time Live Telemetry (Open-Meteo &amp; GloFAS Active)</span>
             </div>
 
             <!-- Quick City Hotspots -->
             <div class="w-full lg:w-auto flex items-center gap-1.5 overflow-x-auto pb-1 lg:pb-0 text-xs">
                 <span class="text-slate-400 font-semibold shrink-0 mr-1">Basins:</span>
+                <button onclick="quickSelect('Dhubri')" class="px-2.5 py-1 rounded-lg bg-red-950/40 hover:bg-red-900/60 text-red-300 hover:text-white border border-red-700/50 text-xs font-medium transition-all shrink-0">Dhubri (Brahmaputra)</button>
+                <button onclick="quickSelect('Chennai')" class="px-2.5 py-1 rounded-lg bg-yellow-950/40 hover:bg-yellow-900/60 text-yellow-300 hover:text-white border border-yellow-700/50 text-xs font-medium transition-all shrink-0">Chennai (Coast)</button>
                 <button onclick="quickSelect('Cuttack')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-medium transition-all shrink-0">Cuttack</button>
-                <button onclick="quickSelect('Guwahati')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-medium transition-all shrink-0">Guwahati</button>
-                <button onclick="quickSelect('Patna')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-medium transition-all shrink-0">Patna</button>
                 <button onclick="quickSelect('Mumbai')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-medium transition-all shrink-0">Mumbai</button>
-                <button onclick="quickSelect('Kolkata')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-medium transition-all shrink-0">Kolkata</button>
                 <button onclick="quickSelect('Kochi')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-medium transition-all shrink-0">Kochi</button>
+                <button onclick="quickSelect('Delhi')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-medium transition-all shrink-0">Delhi</button>
             </div>
         </div>
 
@@ -312,7 +295,7 @@
                         <div class="flex items-center gap-2">
                             <a 
                                 id="fullscreenMapLink"
-                                href="/embed_map?location={{ init_location }}&scenario={{ init_scenario }}" 
+                                href="/embed_map?location={{ init_location }}&scenario=live" 
                                 target="_blank"
                                 class="text-xs px-3 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-bold transition-all shadow-md flex items-center gap-1.5 cursor-pointer">
                                 <span>🗖 Open Fullscreen Map</span>
@@ -333,7 +316,7 @@
                     <div class="w-full rounded-xl overflow-hidden border border-slate-800 shadow-inner bg-slate-950" style="height: 560px;">
                         <iframe 
                             id="mapFrame" 
-                            src="/embed_map?location={{ init_location }}&scenario={{ init_scenario }}" 
+                            src="/embed_map?location={{ init_location }}&scenario=live" 
                             class="w-full h-full border-0"
                             loading="eager"
                             title="Interactive Flood Risk and Evacuation Map">
@@ -369,8 +352,22 @@
                     <!-- Designated Shelter Cards -->
                     <div id="sheltersDisplayGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                         {% if not init_data.evacuation.show_evacuation %}
-                        <div class="col-span-2 text-center py-5 text-slate-400 bg-slate-900/50 rounded-xl border border-slate-800">
-                            ✅ <b>AREA IS VERIFIED SECURE & NOMINAL:</b> All river channels and drainage systems are within safe capacity. No evacuation required or allocated.
+                        <div class="col-span-2 p-4 rounded-xl bg-slate-900/80 border border-emerald-500/30 text-slate-200">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <span class="font-bold text-emerald-400 flex items-center gap-1.5">
+                                    <span>🟢</span> AREA VERIFIED SECURE &bull; DESIGNATED EMERGENCY SHELTER ON STANDBY
+                                </span>
+                                {% if init_data.evacuation.active_shelter %}
+                                <span class="font-mono font-bold text-xs text-emerald-400">{{ init_data.evacuation.active_shelter.distance_km }} km away</span>
+                                {% endif %}
+                            </div>
+                            {% if init_data.evacuation.active_shelter %}
+                            <div class="text-sm font-bold text-white">{{ init_data.evacuation.active_shelter.name }}</div>
+                            <div class="text-xs text-slate-400 mt-1">Facility: {{ init_data.evacuation.active_shelter.facility_type }} &bull; Capacity: {{ "{:,}".format(init_data.evacuation.active_shelter.capacity) }} citizens &bull; Elevation: {{ init_data.evacuation.active_shelter.elevation_m }}m ASL</div>
+                            <div class="text-[11px] text-emerald-400/90 mt-1.5 font-mono">Status: CIVIL DEFENSE REINFORCED SANCTUARY &bull; Normal Access Corridors Open</div>
+                            {% else %}
+                            <div class="text-xs text-slate-400 mt-1">All river channels within safe capacity. Regional civil defense centers on standby.</div>
+                            {% endif %}
                         </div>
                         {% elif init_data.assessment.severity == "MODERATE" and init_data.evacuation.active_shelter %}
                         <div class="col-span-2 p-4 rounded-xl bg-yellow-500/10 border border-yellow-500/30 text-slate-200">
@@ -617,49 +614,7 @@
             </div>
         </div>
 
-        <!-- Nationwide 12-River-Basin Threat Sweep Section -->
-        <div class="glass-panel rounded-2xl p-5 shadow-2xl">
-            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-800">
-                <div>
-                    <h3 class="text-base font-bold text-white flex items-center gap-2">
-                        <span>🇮🇳</span> Nationwide River Basin Threat Sweep
-                    </h3>
-                    <p class="text-xs text-slate-400">Real-time river discharge and rainfall monitoring across 12 major Indian river basins</p>
-                </div>
-                <button 
-                    onclick="loadNationalSweep()" 
-                    id="sweepBtn"
-                    class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-sky-400 hover:text-white border border-slate-700 text-xs font-bold rounded-xl transition-all flex items-center gap-2 cursor-pointer">
-                    <span>↻ Refresh National Sweep</span>
-                </button>
-            </div>
-
-            <div class="overflow-x-auto">
-                <table class="w-full text-xs text-left text-slate-300">
-                    <thead class="text-[11px] uppercase bg-slate-900/80 text-slate-400 border-b border-slate-800">
-                        <tr>
-                            <th class="py-2.5 px-4">City / District</th>
-                            <th class="py-2.5 px-4">State</th>
-                            <th class="py-2.5 px-4">River Basin</th>
-                            <th class="py-2.5 px-4 text-center">Hourly Rain</th>
-                            <th class="py-2.5 px-4 text-center">River Discharge</th>
-                            <th class="py-2.5 px-4 text-center">Alert Tier</th>
-                            <th class="py-2.5 px-4">Designated Sanctuary</th>
-                            <th class="py-2.5 px-4 text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="sweepTableBody" class="divide-y divide-slate-800/60 font-mono text-[11px]">
-                        <tr>
-                            <td colspan="8" class="text-center py-6 text-slate-500">
-                                Loading live nationwide river basin telemetry...
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-    </main>
+        </main>
 
     <!-- Footer -->
     <footer class="glass-panel mt-8 py-5 px-6 text-center text-xs text-slate-500 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 max-w-[1650px] w-full mx-auto">
@@ -675,7 +630,7 @@
 
     <!-- Client-Side Real-Time Interaction Script -->
     <script>
-        var activeScenario = "{{ init_scenario }}";
+        var activeScenario = "live";
 
         // Live Clock
         function updateClock() {
@@ -707,7 +662,7 @@
             if (btn) btn.innerHTML = "<span>⚡ Ingesting...</span>";
         }
 
-        // Form Submit Handler (Works 100% on all desktop & mobile keyboards)
+        // Form Submit Handler
         function handleSearchSubmit(e) {
             var city = document.getElementById('locationInput').value.trim();
             if (!city) {
@@ -715,7 +670,7 @@
                 return false;
             }
             showLoadingState(city);
-            window.location.href = "/?location=" + encodeURIComponent(city) + "&scenario=" + encodeURIComponent(activeScenario);
+            window.location.href = "/?location=" + encodeURIComponent(city);
             if (e) e.preventDefault();
             return false;
         }
@@ -724,55 +679,9 @@
         function quickSelect(city) {
             document.getElementById('locationInput').value = city;
             showLoadingState(city);
-            window.location.href = "/?location=" + encodeURIComponent(city) + "&scenario=" + encodeURIComponent(activeScenario);
+            window.location.href = "/?location=" + encodeURIComponent(city);
         }
 
-        // Scenario Selector Handlers
-        function setScenario(sc) {
-            activeScenario = sc;
-            var city = document.getElementById('locationInput').value.trim() || "{{ init_location }}";
-            showLoadingState(city);
-            window.location.href = "/?location=" + encodeURIComponent(city) + "&scenario=" + encodeURIComponent(sc);
-        }
-
-        // Load National Sweep Table
-        async function loadNationalSweep() {
-            var btn = document.getElementById('sweepBtn');
-            var tbody = document.getElementById('sweepTableBody');
-            if (btn) btn.innerText = "Scanning 12 Basins...";
-
-            try {
-                var resp = await fetch("/api/sweep");
-                var res = await resp.json();
-
-                if (res.success && res.results) {
-                    tbody.innerHTML = '';
-                    res.results.forEach(function(row) {
-                        var tr = document.createElement('tr');
-                        tr.className = "hover:bg-slate-800/40 transition-all";
-                        tr.innerHTML = 
-                            "<td class='py-2.5 px-4 font-bold text-white'>" + row.city + "</td>" +
-                            "<td class='py-2.5 px-4 text-slate-400'>" + row.state + "</td>" +
-                            "<td class='py-2.5 px-4 text-sky-400'>" + row.river + "</td>" +
-                            "<td class='py-2.5 px-4 text-center font-mono'>" + row.rain_mmh.toFixed(1) + "</td>" +
-                            "<td class='py-2.5 px-4 text-center font-mono'>" + row.discharge_cumecs.toFixed(1) + "</td>" +
-                            "<td class='py-2.5 px-4 text-center'><span class='px-2 py-0.5 rounded text-[10px] font-bold text-white' style='background:" + row.color + "'>" + row.tier + "</span></td>" +
-                            "<td class='py-2.5 px-4 text-slate-300 text-[11px] truncate max-w-[200px]'>" + row.haven + "</td>" +
-                            "<td class='py-2.5 px-4 text-center'><button onclick='quickSelect(\"" + row.city + "\")' class='text-xs px-2.5 py-1 bg-sky-500/10 hover:bg-sky-500 text-sky-400 hover:text-white rounded-lg border border-sky-500/30 transition-all cursor-pointer font-bold'>Inspect</button></td>";
-                        tbody.appendChild(tr);
-                    });
-                }
-            } catch (err) {
-                console.error("Sweep error:", err);
-            } finally {
-                if (btn) btn.innerText = "↻ Refresh National Sweep";
-            }
-        }
-
-        // Initialize National Sweep
-        window.addEventListener('DOMContentLoaded', function() {
-            loadNationalSweep();
-        });
     </script>
 </body>
 </html>

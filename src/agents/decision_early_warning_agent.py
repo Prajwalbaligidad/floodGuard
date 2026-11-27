@@ -194,10 +194,13 @@ class DecisionEarlyWarningAgent:
         active_shelter = reroute_info.get("active_safe_shelter")
 
         if not show_evac:
+            standby = active_shelter or reroute_info.get("secondary_shelter") or {}
+            standby_name = standby.get("name", "Regional Civil Defense Sanctuary")
+            standby_dist = standby.get("distance_km", 2.5)
             evac_badge_text = "STATUS: NORMAL & SECURE (NO EVACUATION REQUIRED)"
             evac_badge_color = "#16a34a"
-            info_shelter_str = "None Required (Area is Safe & Secure)"
-            legend_shelter_lines = "<div><span style='color:#16a34a;'>●</span> <b>Normal Flow:</b> No Evacuation Needed</div>"
+            info_shelter_str = f"Standby Haven: {standby_name} ({standby_dist} km)"
+            legend_shelter_lines = "<div><span style='color:#10b981;'>🟢</span> <b>Designated Haven</b> (Standby)</div><div><span style='color:#16a34a;'>●</span> <b>Normal Flow:</b> Safe Baseline</div>"
         elif severity == "MODERATE":
             evac_badge_text = "EVACUATION: NEAREST LOCAL RELIEF SPOT ALLOCATED"
             evac_badge_color = "#ca8a04"
@@ -219,11 +222,20 @@ class DecisionEarlyWarningAgent:
         # Generate JavaScript code for shelters and corridors
         shelter_js_code = ""
         if not show_evac:
-            shelter_js_code = """
-        // [LOW RISK / NOT CRITICAL]
-        // Condition satisfied: Safe baseline monitoring. NO evacuation shelters or routes allocated.
-        console.log("Area is safe (LOW risk). No evacuation allocated.");
+            standby = active_shelter or reroute_info.get("secondary_shelter") or {}
+            if standby and "latitude" in standby:
+                shelter_js_code = f"""
+        // [LOW RISK - DESIGNATED STANDBY HAVEN]
+        var standbyMarker = L.circleMarker([{standby['latitude']}, {standby['longitude']}], {{
+            color: '#10b981',
+            fillColor: '#059669',
+            fillOpacity: 0.88,
+            radius: 13,
+            weight: 2
+        }}).addTo(map).bindPopup("<b style='color:#10b981;'>🟢 DESIGNATED EMERGENCY SAFE HAVEN (STANDBY)</b><br><b>{standby['name']}</b><br><b>Facility:</b> {standby.get('facility_type', 'Civil Defense Sanctuary')}<br><b>Distance:</b> {standby.get('distance_km', 2.0)} km inland<br><b>Capacity:</b> {standby.get('capacity', 20000):,} people<br><b>Elevation:</b> {standby.get('elevation_m', 50.0)}m ASL<br><b>Status:</b> CIVIL DEFENSE STANDBY &bull; Verified Dry Ground");
         """
+            else:
+                shelter_js_code = 'console.log("Area is safe (LOW risk).");'
         elif severity == "MODERATE":
             near = active_shelter
             route_json = json.dumps(reroute_info.get("active_route_coords", []))

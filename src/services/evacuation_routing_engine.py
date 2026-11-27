@@ -854,16 +854,16 @@ class EvacuationRoutingEngine:
                 "evacuation_status": "SAFE_NO_EVACUATION_NEEDED",
                 "reroute_triggered": False,
                 "river_gauge": river_gauge,
-                "active_safe_shelter": None,
+                "active_safe_shelter": alternative_haven,
                 "primary_shelter": primary_camp,
                 "secondary_shelter": alternative_haven,
-                "all_shelters": [],
+                "all_shelters": [alternative_haven],
                 "inundation_radius_m": 0,
                 "aborted_route_coords": [],
                 "active_route_coords": [],
                 "tactical_rerouting_instruction": (
-                    f"✅ ALL CLEAR: All river levels and drainage channels in {district} are nominal. "
-                    f"Routine conditions prevail. No evacuation required or allocated."
+                    f"✅ AREA VERIFIED SECURE & NOMINAL: River channels and urban drainage systems are operating within safe capacity at {location_name or district}. "
+                    f"No immediate evacuation is necessary. Designated regional emergency sanctuary on standby: {alternative_haven['name']} ({alternative_haven['distance_km']} km away, elevation {alternative_haven['elevation_m']}m ASL, capacity {alternative_haven['capacity']:,} citizens)."
                 )
             }
 
