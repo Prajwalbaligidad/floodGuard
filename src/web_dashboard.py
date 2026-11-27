@@ -572,8 +572,8 @@ HTML_DASHBOARD_TEMPLATE = """<!DOCTYPE html>
             <!-- Quick City Hotspots -->
             <div class="w-full lg:w-auto flex items-center gap-1.5 overflow-x-auto pb-1 lg:pb-0 text-xs">
                 <span class="text-slate-400 font-semibold shrink-0 mr-1">Basins:</span>
-                <button onclick="quickSelect('Dhubri')" class="px-2.5 py-1 rounded-lg bg-red-950/40 hover:bg-red-900/60 text-red-300 hover:text-white border border-red-700/50 text-xs font-medium transition-all shrink-0">Dhubri (Brahmaputra)</button>
-                <button onclick="quickSelect('Chennai')" class="px-2.5 py-1 rounded-lg bg-yellow-950/40 hover:bg-yellow-900/60 text-yellow-300 hover:text-white border border-yellow-700/50 text-xs font-medium transition-all shrink-0">Chennai (Coast)</button>
+                <button onclick="quickSelect('Dhubri')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-medium transition-all shrink-0">Dhubri</button>
+                <button onclick="quickSelect('Chennai')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-medium transition-all shrink-0">Chennai</button>
                 <button onclick="quickSelect('Cuttack')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-medium transition-all shrink-0">Cuttack</button>
                 <button onclick="quickSelect('Mumbai')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-medium transition-all shrink-0">Mumbai</button>
                 <button onclick="quickSelect('Kochi')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-medium transition-all shrink-0">Kochi</button>
