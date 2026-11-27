@@ -1,0 +1,90 @@
+{
+  "report_metadata": {
+    "report_id": "IAP-ASSESS_LIVE_KOC_993_2026-11-27_15-34-33",
+    "generated_at": "2026-11-27T15:34:36.298651",
+    "station_name": "Kochi",
+    "district": "Ernakulam",
+    "river": "Periyar",
+    "timestamp": "2026-11-27 15:34:33"
+  },
+  "risk_assessment": {
+    "assessment_id": "ASSESS_LIVE_KOC_993_2026-11-27_15-34-33",
+    "station_id": "LIVE_KOC_993",
+    "station_name": "Kochi",
+    "district": "Ernakulam",
+    "river_name": "Periyar",
+    "timestamp": "2026-11-27 15:34:33",
+    "composite_risk_score": 0.247,
+    "composite_confidence": 0.9,
+    "primary_hazard_driver": "DOMINANT_TERRAIN_ELEVATION",
+    "hard_safety_override_triggered": false,
+    "flood_occurrence_confirmed": false,
+    "flood_event_status": "ELEVATED_WATCH_ADVISORY",
+    "flood_probability_pct": 24.7,
+    "overall_severity_tier": "MODERATE",
+    "estimated_lead_time": "12 TO 24 HOURS -- POTENTIAL SURGE IF PRECIPITATION PERSISTS",
+    "identified_vulnerable_locations": [
+      "Periyar Low-lying Embankments",
+      "Ernakulam Central Sluice Gate Basin"
+    ],
+    "headline_verdict": "ELEVATED FLOOD WATCH: River Periyar is rising; drainage networks under pressure.",
+    "chain_of_thought_reasoning": "1. METEOROLOGICAL ANALYSIS: Light-to-moderate seasonal precipitation (0.2 mm/h) within nominal absorptive tolerances.\n2. HYDRAULIC & RIVERINE STAGE: River water level (6.100 m) is safely 3.40 m below Danger Level (9.50 m).\n3. TOPOGRAPHIC RUNOFF BEHAVIOR: Catchment terrain has low permeability (Loam, runoff coefficient 0.55, TWI 16.8), accelerating overland surge directly into drainage networks (choke ratio: 1%).\n4. SPACEBORNE OBSERVATION: Clear sky condition (20% cloud); optical NDWI (-0.050) and SAR radar (-9.2 dB) corroborate surface water extent.\n5. CROSS-DOMAIN SYNTHESIS: Multi-agent consensus weighted score evaluates to 0.247 with 90.2% sensor certainty. Conclusion: ELEVATED FLOOD WATCH: River Periyar is rising; drainage networks under pressure.",
+    "weather_risk": 0.239,
+    "flood_risk": 0.02,
+    "terrain_risk": 0.88,
+    "satellite_risk": 0.181,
+    "specialist_flags": [
+      "SOIL_SATURATION_EXCESS_RUNOFF",
+      "LOW_SLOPE_WATER_PONDING",
+      "OPTICAL_SENSOR_CLOUD_OCCLUDED"
+    ],
+    "inter_agent_messages_count": 1
+  },
+  "decision_and_early_warning": {
+    "alert_code": "YELLOW_ELEVATED_WATCH_ADVISORY",
+    "alert_level_display": "YELLOW (LEVEL 1 - ELEVATED READINESS & MONITORING)",
+    "siren_command": "STANDBY_NO_SIREN_DISPATCH",
+    "public_broadcast_sms": "[YELLOW FLOOD ADVISORY] Elevated water levels and drainage pressure in Ernakulam. Nearest designated evacuation spot: Kochi Kakkanad Civic Community Center (12.62 km). Safe transit corridors are open. Low-lying area residents monitor local bulletins.",
+    "recommended_tactical_actions": [
+      {
+        "priority": "P1_TACTICAL (1-3 Hours)",
+        "category": "TELEMETRY AUDIT",
+        "action": "Increase ultrasonic gauge and rain sensor sampling rate from 60 minutes to 15 minutes.",
+        "designated_agency": "Central Water Commission (CWC) / IMD"
+      },
+      {
+        "priority": "P2_SUSTAINED (3-6 Hours)",
+        "category": "DRAIN CLEARANCE",
+        "action": "Clear solid waste choke points and debris from primary municipal stormwater grates.",
+        "designated_agency": "Municipal Solid Waste Management"
+      }
+    ],
+    "human_approval_checklist": [
+      {
+        "item_id": "CHK_01_EVACUATION",
+        "checkpoint": "District Magistrate / Incident Commander Authorization for Evacuation in Ernakulam",
+        "status": "NOT_REQUIRED",
+        "sign_off_authority": "Deputy Commissioner / District Magistrate"
+      },
+      {
+        "item_id": "CHK_02_NDRF_MOBILIZATION",
+        "checkpoint": "NDRF / SDRF Unit Deployment Requisition Authorization",
+        "status": "STANDBY",
+        "sign_off_authority": "Superintendent of Police & DDMA Coordinator"
+      },
+      {
+        "item_id": "CHK_03_SLUICE_GATES",
+        "checkpoint": "Hydraulic Sluice Gate Closure & Embankment Barrier Lock Authorization on Periyar",
+        "status": "MONITORING",
+        "sign_off_authority": "Chief Engineer, Water Resources Department"
+      },
+      {
+        "item_id": "CHK_04_PUBLIC_BROADCAST",
+        "checkpoint": "Dissemination of Emergency SMS Cell-Broadcast & Media Sirens",
+        "status": "NOT_REQUIRED",
+        "sign_off_authority": "Public Relations Officer & DDMA Control Room"
+      }
+    ],
+    "incident_commander_guidance": "EXECUTION DIRECTIVE FOR ERNAKULAM INCIDENT COMMAND: Current posture is set to YELLOW_ELEVATED_WATCH_ADVISORY. Maintain heightened surveillance and verify all drainage choke points."
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "report_metadata": {
+    "report_id": "IAP-ASSESS_LIVE_CUT_2046_2026-11-07_00-01-54",
+    "generated_at": "2026-11-07T00:01:56.606940",
+    "station_name": "Cuttack",
+    "district": "Cuttack",
+    "river": "Mahanadi & Kathajodi",
+    "timestamp": "2026-11-07 00:01:54"
+  },
+  "risk_assessment": {
+    "assessment_id": "ASSESS_LIVE_CUT_2046_2026-11-07_00-01-54",
+    "station_id": "LIVE_CUT_2046",
+    "station_name": "Cuttack",
+    "district": "Cuttack",
+    "river_name": "Mahanadi & Kathajodi",
+    "timestamp": "2026-11-07 00:01:54",
+    "composite_risk_score": 0.371,
+    "composite_confidence": 0.92,
+    "primary_hazard_driver": "DOMINANT_FLOOD_ELEVATION",
+    "hard_safety_override_triggered": false,
+    "flood_occurrence_confirmed": true,
+    "flood_event_status": "HIGH_RISK_SURGE_IMMINENT",
+    "flood_probability_pct": 50.0,
+    "overall_severity_tier": "HIGH",
+    "estimated_lead_time": "3 TO 6 HOURS -- PRE-DISASTER CREST APPROACHING",
+    "identified_vulnerable_locations": [
+      "Mahanadi & Kathajodi Low-lying Embankments",
+      "Cuttack Central Sluice Gate Basin",
+      "Cuttack Main Drainage Outfall Sector"
+    ],
+    "headline_verdict": "HIGH-RISK FLOOD CREST IMMINENT for Cuttack river corridor (Cuttack).",
+    "chain_of_thought_reasoning": "1. METEOROLOGICAL ANALYSIS: No active precipitation recorded (0.0 mm/h). Atmospheric pressure and wind metrics are stable.\n2. HYDRAULIC & RIVERINE STAGE: River level (29.710 m) exceeds Warning Level (29.60 m), trailing danger mark by only 0.79 m with sustained inflow.\n3. TOPOGRAPHIC RUNOFF BEHAVIOR: Catchment terrain has low permeability (Loam, runoff coefficient 0.55, TWI 16.8), accelerating overland surge directly into drainage networks (choke ratio: 0%).\n4. SPACEBORNE OBSERVATION: Clear sky condition (20% cloud); optical NDWI (0.180) and SAR radar (-14.5 dB) corroborate surface water extent.\n5. CROSS-DOMAIN SYNTHESIS: Multi-agent consensus weighted score evaluates to 0.371 with 92.2% sensor certainty. Conclusion: HIGH-RISK FLOOD CREST IMMINENT for Cuttack river corridor (Cuttack).",
+    "weather_risk": 0.08,
+    "flood_risk": 0.581,
+    "terrain_risk": 0.227,
+    "satellite_risk": 0.55,
+    "specialist_flags": [
+      "ELEVATED_SURFACE_MOISTURE_SIGNATURE",
+      "RIVER_ABOVE_WARNING_LEVEL",
+      "LOW_SLOPE_WATER_PONDING"
+    ],
+    "inter_agent_messages_count": 0
+  },
+  "decision_and_early_warning": {
+    "alert_code": "ORANGE_SEVERE_FLOOD_WARNING",
+    "alert_level_display": "ORANGE (LEVEL 2 - SEVERE FLOOD RISK IMMINENT)",
+    "siren_command": "INTERMITTENT_PULSE_ALERT_COMMUNITY_WARNING",
+    "public_broadcast_sms": "[URGENT ROUTE DIVERSION - RED ALERT] Primary Evacuation Camp (Cuttack South-Central Municipal Relief Grounds & High School) is INUNDATED by expanding floodwaters! DO NOT PROCEED TOWARDS LOWLANDS. All evacuees must IMMEDIATELY DIVERT to Alternative High-Ground Safe Haven: Ravenshaw University Multi-Tier Campus & Auditoriums (Tier-1 Elevated Academic Citadel & High-Ground Sanctuary, Distance: 1.2 km). Move to high ground immediately!",
+    "recommended_tactical_actions": [
+      {
+        "priority": "P0_IMMEDIATE (0-15 Mins)",
+        "category": "DYNAMIC_EVACUATION_REROUTING",
+        "action": "Seal off inundated Primary Camp access road. Direct all citizen evacuation convoys along elevated bypass routes to Ravenshaw University Multi-Tier Campus & Auditoriums.",
+        "designated_agency": "Traffic Police & SDRF Rapid Response"
+      },
+      {
+        "priority": "P0_IMMEDIATE (0-60 Mins)",
+        "category": "PRE-POSITIONING",
+        "action": "Pre-position SDRF search & rescue units and inflatable dinghies at Mahanadi & Kathajodi Low-lying Embankments.",
+        "designated_agency": "SDRF / Civil Defence"
+      },
+      {
+        "priority": "P1_TACTICAL (1-3 Hours)",
+        "category": "EMBANKMENT PATROL",
+        "action": "Deploy 24/7 geotechnical inspection teams along river earthen dykes with geo-bags and sandbag reinforcements.",
+        "designated_agency": "Water Resources Department"
+      },
+      {
+        "priority": "P2_SUSTAINED (3-6 Hours)",
+        "category": "COMMUNITY ALERT",
+        "action": "Issue targeted audio announcements via loudspeaker vans across floodplain hamlets advising voluntary relocation.",
+        "designated_agency": "District Information & Public Relations (DIPR)"
+      }
+    ],
+    "human_approval_checklist": [
+      {
+        "item_id": "CHK_01_EVACUATION",
+        "checkpoint": "District Magistrate / Incident Commander Authorization for Evacuation in Cuttack",
+        "status": "PENDING_APPROVAL",
+        "sign_off_authority": "Deputy Commissioner / District Magistrate"
+      },
+      {
+        "item_id": "CHK_02_NDRF_MOBILIZATION",
+        "checkpoint": "NDRF / SDRF Unit Deployment Requisition Authorization",
+        "status": "PENDING_APPROVAL",
+        "sign_off_authority": "Superintendent of Police & DDMA Coordinator"
+      },
+      {
+        "item_id": "CHK_03_SLUICE_GATES",
+        "checkpoint": "Hydraulic Sluice Gate Closure & Embankment Barrier Lock Authorization on Mahanadi & Kathajodi",
+        "status": "MONITORING",
+        "sign_off_authority": "Chief Engineer, Water Resources Department"
+      },
+      {
+        "item_id": "CHK_04_PUBLIC_BROADCAST",
+        "checkpoint": "Dissemination of Emergency SMS Cell-Broadcast & Media Sirens",
+        "status": "NOT_REQUIRED",
+        "sign_off_authority": "Public Relations Officer & DDMA Control Room"
+      }
+    ],
+    "incident_commander_guidance": "EXECUTION DIRECTIVE FOR CUTTACK INCIDENT COMMAND: Current posture is set to ORANGE_SEVERE_FLOOD_WARNING. Maintain heightened surveillance and verify all drainage choke points."
+  }
+}

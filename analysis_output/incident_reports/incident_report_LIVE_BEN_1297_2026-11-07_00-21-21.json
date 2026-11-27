@@ -1,0 +1,81 @@
+{
+  "report_metadata": {
+    "report_id": "IAP-ASSESS_LIVE_BEN_1297_2026-11-07_00-21-21",
+    "generated_at": "2026-11-07T00:21:24.076894",
+    "station_name": "Bengaluru",
+    "district": "Bengaluru Urban",
+    "river": "Vrishabhavathi Basin",
+    "timestamp": "2026-11-07 00:21:21"
+  },
+  "risk_assessment": {
+    "assessment_id": "ASSESS_LIVE_BEN_1297_2026-11-07_00-21-21",
+    "station_id": "LIVE_BEN_1297",
+    "station_name": "Bengaluru",
+    "district": "Bengaluru Urban",
+    "river_name": "Vrishabhavathi Basin",
+    "timestamp": "2026-11-07 00:21:21",
+    "composite_risk_score": 0.164,
+    "composite_confidence": 0.9,
+    "primary_hazard_driver": "ROUTINE_BASELINE",
+    "hard_safety_override_triggered": false,
+    "flood_occurrence_confirmed": false,
+    "flood_event_status": "NO_FLOOD_NORMAL_CONDITIONS",
+    "flood_probability_pct": 16.4,
+    "overall_severity_tier": "LOW",
+    "estimated_lead_time": "NO FLOOD THREAT ANTICIPATED OVER NEXT 48 HOURS",
+    "identified_vulnerable_locations": [
+      "None -- Nominal River Channel Capacity"
+    ],
+    "headline_verdict": "ROUTINE BASELINE: River Vrishabhavathi Basin levels and meteorology remain nominal at Bengaluru.",
+    "chain_of_thought_reasoning": "1. METEOROLOGICAL ANALYSIS: No active precipitation recorded (0.0 mm/h). Atmospheric pressure and wind metrics are stable.\n2. HYDRAULIC & RIVERINE STAGE: River water level (910.270 m) is safely 3.23 m below Danger Level (913.50 m).\n3. TOPOGRAPHIC RUNOFF BEHAVIOR: Catchment terrain has low permeability (Loam, runoff coefficient 0.55, TWI 16.8), accelerating overland surge directly into drainage networks (choke ratio: 0%).\n4. SPACEBORNE OBSERVATION: Clear sky condition (20% cloud); optical NDWI (-0.050) and SAR radar (-9.2 dB) corroborate surface water extent.\n5. CROSS-DOMAIN SYNTHESIS: Multi-agent consensus weighted score evaluates to 0.164 with 90.2% sensor certainty. Conclusion: ROUTINE BASELINE: River Vrishabhavathi Basin levels and meteorology remain nominal at Bengaluru.",
+    "weather_risk": 0.32,
+    "flood_risk": 0.028,
+    "terrain_risk": 0.16,
+    "satellite_risk": 0.169,
+    "specialist_flags": [
+      "OPTICAL_SENSOR_CLOUD_OCCLUDED"
+    ],
+    "inter_agent_messages_count": 0
+  },
+  "decision_and_early_warning": {
+    "alert_code": "GREEN_ROUTINE_MONITORING",
+    "alert_level_display": "GREEN (LEVEL 0 - ALL CLEAR / NORMAL BASIN FLOW)",
+    "siren_command": "NORMAL_OPERATIONS",
+    "public_broadcast_sms": "[ALL CLEAR] River Vrishabhavathi Basin discharge and weather telemetry are nominal at Bengaluru in Bengaluru Urban. Routine conditions prevail. No evacuation required or allocated.",
+    "recommended_tactical_actions": [
+      {
+        "priority": "ROUTINE",
+        "category": "BASELINE_MONITORING",
+        "action": "Maintain automated telemetry logging and standard seasonal hydrograph recording.",
+        "designated_agency": "Autonomous Multi-Agent System"
+      }
+    ],
+    "human_approval_checklist": [
+      {
+        "item_id": "CHK_01_EVACUATION",
+        "checkpoint": "District Magistrate / Incident Commander Authorization for Evacuation in Bengaluru Urban",
+        "status": "NOT_REQUIRED",
+        "sign_off_authority": "Deputy Commissioner / District Magistrate"
+      },
+      {
+        "item_id": "CHK_02_NDRF_MOBILIZATION",
+        "checkpoint": "NDRF / SDRF Unit Deployment Requisition Authorization",
+        "status": "STANDBY",
+        "sign_off_authority": "Superintendent of Police & DDMA Coordinator"
+      },
+      {
+        "item_id": "CHK_03_SLUICE_GATES",
+        "checkpoint": "Hydraulic Sluice Gate Closure & Embankment Barrier Lock Authorization on Vrishabhavathi Basin",
+        "status": "MONITORING",
+        "sign_off_authority": "Chief Engineer, Water Resources Department"
+      },
+      {
+        "item_id": "CHK_04_PUBLIC_BROADCAST",
+        "checkpoint": "Dissemination of Emergency SMS Cell-Broadcast & Media Sirens",
+        "status": "NOT_REQUIRED",
+        "sign_off_authority": "Public Relations Officer & DDMA Control Room"
+      }
+    ],
+    "incident_commander_guidance": "EXECUTION DIRECTIVE FOR BENGALURU URBAN INCIDENT COMMAND: Current posture is set to GREEN_ROUTINE_MONITORING. Maintain heightened surveillance and verify all drainage choke points."
+  }
+}

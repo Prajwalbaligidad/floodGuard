@@ -1,0 +1,118 @@
+{
+  "report_metadata": {
+    "report_id": "IAP-ASSESS_LIVE_DHU_2602_2026-11-27_15-43-31",
+    "generated_at": "2026-11-27T15:43:40.584928",
+    "station_name": "Dhubri",
+    "district": "Dhubri",
+    "river": "Brahmaputra",
+    "timestamp": "2026-11-27 15:43:31"
+  },
+  "risk_assessment": {
+    "assessment_id": "ASSESS_LIVE_DHU_2602_2026-11-27_15-43-31",
+    "station_id": "LIVE_DHU_2602",
+    "station_name": "Dhubri",
+    "district": "Dhubri",
+    "river_name": "Brahmaputra",
+    "timestamp": "2026-11-27 15:43:31",
+    "composite_risk_score": 0.95,
+    "composite_confidence": 0.92,
+    "primary_hazard_driver": "PHYSICAL_RIVER_DANGER_BREACH",
+    "hard_safety_override_triggered": true,
+    "flood_occurrence_confirmed": true,
+    "flood_event_status": "CONFIRMED_FLOOD_DISASTER",
+    "flood_probability_pct": 95.0,
+    "overall_severity_tier": "CRITICAL",
+    "estimated_lead_time": "IMMEDIATE (< 2 Hours) -- ACTIVE DELUGE / INUNDATION",
+    "identified_vulnerable_locations": [
+      "Brahmaputra Low-lying Embankments",
+      "Dhubri Central Sluice Gate Basin",
+      "Dhubri Main Drainage Outfall Sector",
+      "Peripheral Agriculture Floodplains"
+    ],
+    "headline_verdict": "CRITICAL FLOOD DISASTER CONFIRMED along River Brahmaputra in Dhubri district.",
+    "chain_of_thought_reasoning": "1. METEOROLOGICAL ANALYSIS: No active precipitation recorded (0.0 mm/h). Atmospheric pressure and wind metrics are stable.\n2. HYDRAULIC & RIVERINE STAGE: River Brahmaputra has BREACHED the official Danger Level (35.50 m) at 36.480 m (buffer: +0.980 m). Rate of rise is surging at +0.000 m/h.\n3. TOPOGRAPHIC RUNOFF BEHAVIOR: Catchment terrain has low permeability (Loam, runoff coefficient 0.55, TWI 16.8), accelerating overland surge directly into drainage networks (choke ratio: 0%).\n4. SPACEBORNE OBSERVATION: Clear sky condition (20% cloud); optical NDWI (0.380) and SAR radar (-18.2 dB) corroborate surface water extent.\n5. CROSS-DOMAIN SYNTHESIS: Multi-agent consensus weighted score evaluates to 0.950 with 92.2% sensor certainty. Conclusion: CRITICAL FLOOD DISASTER CONFIRMED along River Brahmaputra in Dhubri district.",
+    "weather_risk": 0.185,
+    "flood_risk": 0.99,
+    "terrain_risk": 0.41,
+    "satellite_risk": 0.9,
+    "specialist_flags": [
+      "RIVER_BREACHED_DANGER_LEVEL",
+      "SIGNIFICANT_FLOOD_SPREAD",
+      "SAR_SPECULAR_FLOOD_SIGNATURE",
+      "HIGH_NDWI_OPEN_STANDING_WATER",
+      "LOW_SLOPE_WATER_PONDING"
+    ],
+    "inter_agent_messages_count": 2
+  },
+  "decision_and_early_warning": {
+    "alert_code": "RED_DELUGE_EVACUATION_ALERT",
+    "alert_level_display": "RED (LEVEL 3 - IMMEDIATE DISASTER EVACUATION)",
+    "siren_command": "TRIGGER_CONTINUOUS_EMERGENCY_WAIL_SIRENS_ALL_WARDS",
+    "public_broadcast_sms": "[URGENT ROUTE DIVERSION - RED ALERT] Primary Evacuation Camp (Dhubri Municipal Regional Relief Grounds & High-Plinth School) is INUNDATED by expanding floodwaters! DO NOT PROCEED TOWARDS LOWLANDS. All evacuees must IMMEDIATELY DIVERT to Alternative High-Ground Safe Haven: Dhubri Regional Indoor Sports Complex & Civil Defense Arena (Tier-3 Elevated Highland Sports & Civil Defense Arena, Distance: 3.46 km). Move to high ground immediately!",
+    "recommended_tactical_actions": [
+      {
+        "priority": "P0_IMMEDIATE (0-15 Mins)",
+        "category": "DYNAMIC_EVACUATION_REROUTING",
+        "action": "Seal off inundated Primary Camp access road. Direct all citizen evacuation convoys along elevated bypass routes to Dhubri Regional Indoor Sports Complex & Civil Defense Arena.",
+        "designated_agency": "Traffic Police & SDRF Rapid Response"
+      },
+      {
+        "priority": "P0_IMMEDIATE (0-60 Mins)",
+        "category": "LIFE_SAFETY & EVACUATION",
+        "action": "Deploy 4 NDRF battalions & SDRF motorized rescue boats to Brahmaputra Low-lying Embankments, Dhubri Central Sluice Gate Basin.",
+        "designated_agency": "NDRF / District Disaster Management Authority (DDMA)"
+      },
+      {
+        "priority": "P0_IMMEDIATE (0-60 Mins)",
+        "category": "HYDRAULIC DEFENSE",
+        "action": "Full closure of Brahmaputra outfall sluice gates to prevent backflow into Dhubri municipal storm channels.",
+        "designated_agency": "Water Resources Department (WRD) / Municipal Corporation"
+      },
+      {
+        "priority": "P1_TACTICAL (1-3 Hours)",
+        "category": "DRAINAGE & POWER SAFETY",
+        "action": "Activate all auxiliary heavy dewatering diesel pumps (5000 gpm); shut down inundated electrical transformers.",
+        "designated_agency": "APDCL (Power) & Urban Drainage Authority"
+      },
+      {
+        "priority": "P1_TACTICAL (1-3 Hours)",
+        "category": "TRAFFIC & CORRIDORS",
+        "action": "Enforce traffic diversions across arterial bridges and secure elevated evacuation corridors to district relief shelters.",
+        "designated_agency": "Traffic Police & Transport Department"
+      },
+      {
+        "priority": "P2_SUSTAINED (3-12 Hours)",
+        "category": "MEDICAL & RELIEF",
+        "action": "Establish mobile medical clinics, potable water tankers, and dry ration distribution in designated cyclone/flood shelters.",
+        "designated_agency": "Health & Family Welfare / Food & Civil Supplies"
+      }
+    ],
+    "human_approval_checklist": [
+      {
+        "item_id": "CHK_01_EVACUATION",
+        "checkpoint": "District Magistrate / Incident Commander Authorization for Evacuation in Dhubri",
+        "status": "PENDING_APPROVAL",
+        "sign_off_authority": "Deputy Commissioner / District Magistrate"
+      },
+      {
+        "item_id": "CHK_02_NDRF_MOBILIZATION",
+        "checkpoint": "NDRF / SDRF Unit Deployment Requisition Authorization",
+        "status": "PENDING_APPROVAL",
+        "sign_off_authority": "Superintendent of Police & DDMA Coordinator"
+      },
+      {
+        "item_id": "CHK_03_SLUICE_GATES",
+        "checkpoint": "Hydraulic Sluice Gate Closure & Embankment Barrier Lock Authorization on Brahmaputra",
+        "status": "AUTHORIZED_AUTOMATICALLY",
+        "sign_off_authority": "Chief Engineer, Water Resources Department"
+      },
+      {
+        "item_id": "CHK_04_PUBLIC_BROADCAST",
+        "checkpoint": "Dissemination of Emergency SMS Cell-Broadcast & Media Sirens",
+        "status": "PENDING_APPROVAL",
+        "sign_off_authority": "Public Relations Officer & DDMA Control Room"
+      }
+    ],
+    "incident_commander_guidance": "EXECUTION DIRECTIVE FOR DHUBRI INCIDENT COMMAND: Current posture is set to RED_DELUGE_EVACUATION_ALERT. Execute mandatory evacuation and water gate containment immediately."
+  }
+}
