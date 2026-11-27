@@ -1,0 +1,79 @@
+{
+  "report_metadata": {
+    "report_id": "IAP-ASSESS_LIVE_GUW_2614_2026-11-27_21-11-37",
+    "generated_at": "2026-11-27T21:11:41.970237",
+    "station_name": "Guwahati",
+    "district": "Kamrup Metropolitan",
+    "river": "Brahmaputra",
+    "timestamp": "2026-11-27 21:11:37"
+  },
+  "risk_assessment": {
+    "assessment_id": "ASSESS_LIVE_GUW_2614_2026-11-27_21-11-37",
+    "station_id": "LIVE_GUW_2614",
+    "station_name": "Guwahati",
+    "district": "Kamrup Metropolitan",
+    "river_name": "Brahmaputra",
+    "timestamp": "2026-11-27 21:11:37",
+    "composite_risk_score": 0.13,
+    "composite_confidence": 0.92,
+    "primary_hazard_driver": "ROUTINE_BASELINE",
+    "hard_safety_override_triggered": false,
+    "flood_occurrence_confirmed": false,
+    "flood_event_status": "NO_FLOOD_NORMAL_CONDITIONS",
+    "flood_probability_pct": 13.0,
+    "overall_severity_tier": "LOW",
+    "estimated_lead_time": "NO FLOOD THREAT ANTICIPATED OVER NEXT 48 HOURS",
+    "identified_vulnerable_locations": [
+      "None -- Nominal River Channel Capacity"
+    ],
+    "headline_verdict": "ROUTINE BASELINE: River Brahmaputra levels and meteorology remain nominal at Guwahati.",
+    "chain_of_thought_reasoning": "1. METEOROLOGICAL ANALYSIS: No active precipitation recorded (0.0 mm/h). Atmospheric pressure and wind metrics are stable.\n2. HYDRAULIC & RIVERINE STAGE: River water level (55.020 m) is safely 3.48 m below Danger Level (58.50 m).\n3. TOPOGRAPHIC RUNOFF BEHAVIOR: Catchment terrain has low permeability (Loam, runoff coefficient 0.55, TWI 16.8), accelerating overland surge directly into drainage networks (choke ratio: 0%).\n4. SPACEBORNE OBSERVATION: Clear sky condition (20% cloud); optical NDWI (-0.050) and SAR radar (-9.2 dB) corroborate surface water extent.\n5. CROSS-DOMAIN SYNTHESIS: Multi-agent consensus weighted score evaluates to 0.130 with 92.2% sensor certainty. Conclusion: ROUTINE BASELINE: River Brahmaputra levels and meteorology remain nominal at Guwahati.",
+    "weather_risk": 0.18,
+    "flood_risk": 0.02,
+    "terrain_risk": 0.341,
+    "satellite_risk": 0.09,
+    "specialist_flags": [],
+    "inter_agent_messages_count": 0
+  },
+  "decision_and_early_warning": {
+    "alert_code": "GREEN_ROUTINE_MONITORING",
+    "alert_level_display": "GREEN (LEVEL 0 - ALL CLEAR / NORMAL BASIN FLOW)",
+    "siren_command": "NORMAL_OPERATIONS",
+    "public_broadcast_sms": "[ALL CLEAR] River Brahmaputra discharge and weather telemetry are nominal at Guwahati in Kamrup Metropolitan. Routine conditions prevail. No evacuation required or allocated.",
+    "recommended_tactical_actions": [
+      {
+        "priority": "ROUTINE",
+        "category": "BASELINE_MONITORING",
+        "action": "Maintain automated telemetry logging and standard seasonal hydrograph recording.",
+        "designated_agency": "Autonomous Multi-Agent System"
+      }
+    ],
+    "human_approval_checklist": [
+      {
+        "item_id": "CHK_01_EVACUATION",
+        "checkpoint": "District Magistrate / Incident Commander Authorization for Evacuation in Kamrup Metropolitan",
+        "status": "NOT_REQUIRED",
+        "sign_off_authority": "Deputy Commissioner / District Magistrate"
+      },
+      {
+        "item_id": "CHK_02_NDRF_MOBILIZATION",
+        "checkpoint": "NDRF / SDRF Unit Deployment Requisition Authorization",
+        "status": "STANDBY",
+        "sign_off_authority": "Superintendent of Police & DDMA Coordinator"
+      },
+      {
+        "item_id": "CHK_03_SLUICE_GATES",
+        "checkpoint": "Hydraulic Sluice Gate Closure & Embankment Barrier Lock Authorization on Brahmaputra",
+        "status": "MONITORING",
+        "sign_off_authority": "Chief Engineer, Water Resources Department"
+      },
+      {
+        "item_id": "CHK_04_PUBLIC_BROADCAST",
+        "checkpoint": "Dissemination of Emergency SMS Cell-Broadcast & Media Sirens",
+        "status": "NOT_REQUIRED",
+        "sign_off_authority": "Public Relations Officer & DDMA Control Room"
+      }
+    ],
+    "incident_commander_guidance": "EXECUTION DIRECTIVE FOR KAMRUP METROPOLITAN INCIDENT COMMAND: Current posture is set to GREEN_ROUTINE_MONITORING. Maintain heightened surveillance and verify all drainage choke points."
+  }
+}

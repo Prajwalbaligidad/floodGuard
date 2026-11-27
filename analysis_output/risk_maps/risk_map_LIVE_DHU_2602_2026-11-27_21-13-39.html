@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disaster Risk & Dynamic Evacuation Map - Dhubri</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: #f8fafc; }
+        #header { background: #1e293b; padding: 14px 24px; border-bottom: 2px solid #334155; display: flex; justify-content: space-between; align-items: center; }
+        #header h1 { margin: 0; font-size: 20px; color: #38bdf8; }
+        .badge-container { display: flex; gap: 10px; }
+        .badge { padding: 6px 14px; border-radius: 9999px; font-weight: bold; font-size: 13px; letter-spacing: 0.5px; }
+        #risk-badge { background: #16a34a; color: white; }
+        #evac-badge { background: #16a34a; color: white; }
+        #map { height: calc(100vh - 140px); width: 100%; }
+        #info-panel { background: #1e293b; padding: 12px 24px; font-size: 13px; color: #cbd5e1; display: flex; gap: 24px; border-top: 1px solid #334155; flex-wrap: wrap; }
+        .badge-tag { font-weight: bold; color: #f8fafc; }
+    </style>
+</head>
+<body>
+    <div id="header">
+        <div>
+            <h1>DYNAMIC RISK & EVACUATION SAFETY MAP &bull; DHUBRI</h1>
+            <small style="color: #94a3b8;">River Brahmaputra Basin &bull; District: Dhubri &bull; Timestamp: 2026-11-27 21:13:39</small>
+        </div>
+        <div class="badge-container">
+            <div id="risk-badge" class="badge">LOW RISK (13%)</div>
+            <div id="evac-badge" class="badge">STATUS: NORMAL & SECURE (NO EVACUATION REQUIRED)</div>
+        </div>
+    </div>
+    <div id="map"></div>
+    <div id="info-panel">
+        <div><span class="badge-tag">Lead Time:</span> NO FLOOD THREAT ANTICIPATED OVER NEXT 48 HOURS</div>
+        <div><span class="badge-tag">Evacuation Allocation:</span> Standby Haven: Dhubri Government Polytechnic & Engineering College Campus (3.46 km)</div>
+        <div><span class="badge-tag">Re-Assessment Directive:</span> ✅ AREA VERIFIED SECURE & NOMINAL: River channels and urban drainage systems are operating ...</div>
+    </div>
+    <script>
+        var map = L.map('map').setView([26.0207, 89.974], 13);
+
+        // 100% Free Public Map Tile Servers (NO API KEY required, NO watermark)
+        // 1. Esri World Street & Hydrology Map
+        var streetLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+            maxZoom: 19,
+            attribution: 'Tiles &copy; Esri, DeLorme, NAVTEQ | Autonomous Multi-Agent AI System'
+        });
+
+        // 2. Esri High-Resolution World Satellite Imagery
+        var satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            maxZoom: 19,
+            attribution: 'Tiles &copy; Esri, DigitalGlobe, GeoEye, Earthstar Geographics'
+        });
+
+        // 3. Esri National Geographic Topographic Map
+        var topoLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}', {
+            maxZoom: 16,
+            attribution: 'Tiles &copy; National Geographic, Esri'
+        });
+
+        // Base Layer Catalog
+        var baseMaps = {
+            "🗺️ Street & River Network (Esri)": streetLayer,
+            "🛰️ Spaceborne Satellite (Esri)": satelliteLayer,
+            "⛰️ Topographic Elevation (Esri)": topoLayer
+        };
+
+        var userApiKey = "5c75c2ac-f119-4d76-a7e0-c8179962e9c8".trim();
+        if (userApiKey) {
+            var stadiaSmooth = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{y}/{x}{r}.png?api_key=' + userApiKey, {
+                maxZoom: 20,
+                attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a>'
+            });
+            var stadiaDark = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{y}/{x}{r}.png?api_key=' + userApiKey, {
+                maxZoom: 20,
+                attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a>'
+            });
+            var cartoVoyager = L.tileLayer('https://tiles.stadiamaps.com/tiles/carto_voyager/{z}/{y}/{x}{r}.png?api_key=' + userApiKey, {
+                maxZoom: 20,
+                attribution: '&copy; CARTO, &copy; Stadia Maps'
+            });
+
+            baseMaps["🧭 CARTO / Stadia Smooth"] = stadiaSmooth;
+            baseMaps["🌃 CARTO / Stadia Dark"] = stadiaDark;
+            baseMaps["🗺️ CARTO Voyager"] = cartoVoyager;
+            stadiaSmooth.addTo(map);
+        } else {
+            streetLayer.addTo(map);
+        }
+
+        // Layer Switcher Control (Top Right)
+        L.control.layers(baseMaps).addTo(map);
+
+        // 1. Civic Population & Urban Surveillance Center Marker (Inhabited City Center)
+        var civicIcon = L.divIcon({
+            className: 'civic-marker-icon',
+            html: '<div style="background:#2563eb; color:white; border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; font-size:18px; border:3px solid white; box-shadow:0 3px 8px rgba(0,0,0,0.5); cursor:pointer;">🏢</div>',
+            iconSize: [36, 36],
+            iconAnchor: [18, 18]
+        });
+
+        var civicMarker = L.marker([26.0207, 89.974], { icon: civicIcon }).addTo(map)
+            .bindPopup(
+                "<div style='min-width:260px; font-size:13px; font-family:sans-serif;'>" +
+                "<div style='background:#1e3a8a; color:white; padding:6px 10px; border-radius:4px; font-weight:bold; margin-bottom:8px; display:flex; align-items:center; gap:6px;'>" +
+                "<span>🏢</span> CIVIC POPULATION & MONITORING CENTER</div>" +
+                "<b>Location:</b> Dhubri City Urban Center (Dhubri)<br>" +
+                "<b>Type:</b> Inhabited Residential & Municipal Zone<br>" +
+                "<b>Ground Elevation:</b> 28.0 meters ASL<br>" +
+                "<b>Surveillance Basin:</b> River Brahmaputra<br>" +
+                "<hr style='margin:6px 0; border:0; border-top:1px solid #cbd5e1;'>" +
+                "<b>Operational Risk Status:</b> <span style='font-weight:bold; color:#16a34a;'>LOW RISK (13%)</span><br>" +
+                "<b>Event State:</b> NO_FLOOD_NORMAL_CONDITIONS<br>" +
+                "<b>Estimated Lead Time:</b> NO FLOOD THREAT ANTICIPATED OVER NEXT 48 HOURS<br>" +
+                "</div>"
+            ).openPopup();
+
+        // 2. Hydrological River Hazard Monitoring Gauge Marker (River Channel Section)
+        var riverIcon = L.divIcon({
+            className: 'river-marker-icon',
+            html: '<div style="background:#0284c7; color:white; border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; font-size:18px; border:3px solid white; box-shadow:0 3px 8px rgba(0,0,0,0.5); cursor:pointer;">🌊</div>',
+            iconSize: [36, 36],
+            iconAnchor: [18, 18]
+        });
+
+        var riverGaugeMarker = L.marker([26.0357, 89.979], { icon: riverIcon }).addTo(map)
+            .bindPopup(
+                "<div style='min-width:270px; font-size:13px; font-family:sans-serif;'>" +
+                "<div style='background:#0369a1; color:white; padding:6px 10px; border-radius:4px; font-weight:bold; margin-bottom:8px; display:flex; align-items:center; gap:6px;'>" +
+                "<span>🌊</span> HYDROLOGICAL RIVER HAZARD GAUGE</div>" +
+                "<b>Monitoring Station:</b> Brahmaputra Hydrological Monitoring Gauge<br>" +
+                "<b>River System:</b> River Brahmaputra<br>" +
+                "<b>Hydrological Section:</b> Brahmaputra Embankment & Channel Corridor<br>" +
+                "<hr style='margin:6px 0; border:0; border-top:1px solid #cbd5e1;'>" +
+                "<b>Current Stage Level:</b> 28.02 m<br>" +
+                "<b>Warning Stage:</b> 30.60 m | <b>Danger Stage:</b> 31.50 m<br>" +
+                "<b>Embankment State:</b> <span style='font-weight:bold; color:#16a34a;'>NOMINAL / SAFE FLOW</span><br>" +
+                "</div>"
+            );
+
+        // Area Risk Perimeter Circle (Surveillance Radius around Civic Node)
+        var areaCircle = L.circle([26.0207, 89.974], {
+            color: '#16a34a',
+            fillColor: '#16a34a',
+            fillOpacity: 0.28,
+            radius: 500
+        }).addTo(map).bindPopup("<b>🟢 SAFE ZONE: ROUTINE MONITORING</b><br>Radius: 500 meters<br>Severity: LOW");
+
+        
+        // [LOW RISK - DESIGNATED STANDBY HAVEN]
+        var standbyMarker = L.circleMarker([25.9947, 89.955], {
+            color: '#10b981',
+            fillColor: '#059669',
+            fillOpacity: 0.88,
+            radius: 13,
+            weight: 2
+        }).addTo(map).bindPopup("<b style='color:#10b981;'>🟢 DESIGNATED EMERGENCY SAFE HAVEN (STANDBY)</b><br><b>Dhubri Government Polytechnic & Engineering College Campus</b><br><b>Facility:</b> University & Technical Campus<br><b>Distance:</b> 3.46 km inland<br><b>Capacity:</b> 25,000 people<br><b>Elevation:</b> 46.0m ASL<br><b>Status:</b> CIVIL DEFENSE STANDBY &bull; Verified Dry Ground");
+        
+
+        // 3. Interactive Map Legend (Bottom Right)
+        var legend = L.control({position: 'bottomright'});
+        legend.onAdd = function (map) {
+            var div = L.DomUtil.create('div', 'info legend');
+            div.style.background = '#1e293b';
+            div.style.padding = '12px 16px';
+            div.style.borderRadius = '8px';
+            div.style.color = '#f8fafc';
+            div.style.fontSize = '12px';
+            div.style.lineHeight = '19px';
+            div.style.boxShadow = '0 4px 12px rgba(0,0,0,0.5)';
+            div.style.border = '1px solid #334155';
+            div.innerHTML =
+                "<div style='font-weight:bold; margin-bottom:8px; color:#38bdf8; font-size:13px;'>SPATIAL MAP LEGEND</div>" +
+                "<div>🏢 <b>Civic Population Center</b> (Inhabited City)</div>" +
+                "<div>🌊 <b>Hydrological River Gauge</b> (River Embankment)</div>" +
+                "<div><span style='color:#10b981;'>🟢</span> <b>Designated Haven</b> (Standby)</div><div><span style='color:#16a34a;'>●</span> <b>Normal Flow:</b> Safe Baseline</div>" +
+                "<div style='margin-top:6px; border-top:1px solid #334155; padding-top:6px;'><b>Perimeter:</b> 500m Surveillance Buffer</div>";
+            return div;
+        };
+        legend.addTo(map);
+    </script>
+</body>
+</html>
