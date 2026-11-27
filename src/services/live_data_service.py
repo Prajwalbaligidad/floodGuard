@@ -302,8 +302,19 @@ class LiveDataService:
         danger_level_m = round(elevation_m + 3.5, 2)
         warning_level_m = round(danger_level_m - 0.9, 2)
 
+        # Basin channel carrying capacity scaling (Mega-rivers like Brahmaputra/Ganga vs standard basins)
+        r_lower = (river_name or "").lower()
+        if any(b in r_lower for b in ["brahmaputra", "ganga", "ganges", "padma", "jamuna", "meghna"]):
+            channel_ref_discharge = 28000.0
+        elif any(b in r_lower for b in ["mahanadi", "godavari", "krishna", "narmada", "indus"]):
+            channel_ref_discharge = 8000.0
+        elif any(b in r_lower for b in ["cauvery", "tapti", "barak", "subarnarekha"]):
+            channel_ref_discharge = 3500.0
+        else:
+            channel_ref_discharge = 1500.0
+
         # Water level derivation based on river discharge and recent rainfall
-        hydraulic_head = (discharge_rate / 1500.0) * 1.8 + (cum_24h / 150.0) * 1.5
+        hydraulic_head = (discharge_rate / channel_ref_discharge) * 2.2 + (cum_24h / 150.0) * 1.5
         water_level_m = round(elevation_m + hydraulic_head, 2)
 
         danger_buffer_m = round(water_level_m - danger_level_m, 2)

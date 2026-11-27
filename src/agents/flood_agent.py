@@ -94,7 +94,9 @@ class FloodAgent(BaseAutonomousAIAgent):
         else:
             # Physical reality: When river is safely within banks (below warning mark),
             # baseline continuous risk is strictly governed by physical discharge and stage buffer
-            discharge_factor = min(0.25, (discharge / 4000.0) * 0.25)
+            r_lower = (river_name or "").lower()
+            discharge_cap = 28000.0 if any(b in r_lower for b in ["brahmaputra", "ganga", "ganges", "padma", "jamuna"]) else (8000.0 if any(b in r_lower for b in ["mahanadi", "godavari", "krishna"]) else 4000.0)
+            discharge_factor = min(0.25, (discharge / discharge_cap) * 0.25)
             buffer_to_warn = max(0.1, warning_level - water_level) if warning_level > 0 else 2.0
             stage_factor = min(0.10, max(0.0, (1.8 - buffer_to_warn) / 1.8) * 0.10)
             waterlog_factor = min(0.06, (waterlogging / 30.0) * 0.06)
