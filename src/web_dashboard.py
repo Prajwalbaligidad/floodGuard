@@ -223,7 +223,7 @@ def evaluate_location(location_name: str, scenario: str = "live", lat_override: 
         "agents": [
             {
                 "type": "Weather Agent",
-                "icon": "🌧️",
+                "icon": "",
                 "risk_score": w_packet.risk_score,
                 "risk_level": w_packet.risk_level,
                 "confidence": int(w_packet.confidence * 100),
@@ -234,7 +234,7 @@ def evaluate_location(location_name: str, scenario: str = "live", lat_override: 
             },
             {
                 "type": "Flood Agent",
-                "icon": "🌊",
+                "icon": "",
                 "risk_score": f_packet.risk_score,
                 "risk_level": f_packet.risk_level,
                 "confidence": int(f_packet.confidence * 100),
@@ -245,7 +245,7 @@ def evaluate_location(location_name: str, scenario: str = "live", lat_override: 
             },
             {
                 "type": "Terrain Agent",
-                "icon": "🏔️",
+                "icon": "",
                 "risk_score": t_packet.risk_score,
                 "risk_level": t_packet.risk_level,
                 "confidence": int(t_packet.confidence * 100),
@@ -256,7 +256,7 @@ def evaluate_location(location_name: str, scenario: str = "live", lat_override: 
             },
             {
                 "type": "Satellite Agent",
-                "icon": "🛰️",
+                "icon": "",
                 "risk_score": s_packet.risk_score,
                 "risk_level": s_packet.risk_level,
                 "confidence": int(s_packet.confidence * 100),
@@ -751,16 +751,14 @@ HTML_DASHBOARD_TEMPLATE = """<!DOCTYPE html>
         <div class="text-center space-y-1">
             <h3 class="text-xl font-black text-white tracking-tight" id="loadingText">Evaluating Live Telemetry...</h3>
             <p class="text-xs text-sky-400 font-mono">Synthesizing 4 Specialist AI Agents (Weather, Flood, Terrain, Satellite)</p>
-            <p class="text-[11px] text-slate-500">Querying Open-Meteo & GloFAS In-Situ Gauges &bull; Alliance University AI Engine</p>
+            <p class="text-[11px] text-slate-500">Querying Open-Meteo & GloFAS In-Situ Gauges </p>
         </div>
     </div>
 
     <!-- Top Navigation Header -->
     <header class="glass-header sticky top-0 z-50 px-4 lg:px-8 py-3.5 flex items-center justify-between shadow-2xl">
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-600 via-blue-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-sky-500/20 text-white font-black text-xl">
-                🛡️
-            </div>
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-600 via-blue-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-sky-500/20 text-white font-black text-xl"><svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
             <div>
                 <div class="flex items-center gap-2">
                     <h1 class="text-lg lg:text-xl font-extrabold tracking-tight text-white flex items-center gap-1.5">
@@ -782,7 +780,7 @@ HTML_DASHBOARD_TEMPLATE = """<!DOCTYPE html>
             </div>
             <div class="text-right hidden sm:block">
                 <div id="liveClock" class="font-mono text-xs text-slate-300 font-semibold">--:--:-- UTC</div>
-                <div class="text-[10px] text-slate-500 font-medium">Alliance University &bull; Dept of CSE</div>
+                
             </div>
         </div>
     </header>
@@ -797,9 +795,7 @@ HTML_DASHBOARD_TEMPLATE = """<!DOCTYPE html>
             <form method="GET" action="/" id="searchForm" class="w-full lg:w-5/12 flex items-center gap-2" onsubmit="handleSearchSubmit(event)">
                 <input type="hidden" name="scenario" id="formScenario" value="live" />
                 <div class="relative flex-1">
-                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                        🔍
-                    </span>
+                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400"><svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></span>
                     <input 
                         type="text" 
                         name="location"
@@ -874,7 +870,7 @@ HTML_DASHBOARD_TEMPLATE = """<!DOCTYPE html>
                     <!-- Cognitive LLM Verdict -->
                     <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 mb-4">
                         <div class="text-[11px] font-bold uppercase tracking-wider text-sky-400 mb-1.5 flex items-center gap-1.5">
-                            <span>🧠</span> Cognitive AI Assessment Verdict
+                            Cognitive AI Assessment Verdict
                         </div>
                         <p id="headlineVerdict" class="text-sm text-slate-200 leading-relaxed font-medium">
                             "{{ init_data.assessment.headline_verdict }}"
@@ -896,7 +892,7 @@ HTML_DASHBOARD_TEMPLATE = """<!DOCTYPE html>
                     <!-- Public Broadcast SMS Banner -->
                     <div class="pt-3 border-t border-slate-800">
                         <div class="text-[11px] text-slate-400 font-bold uppercase tracking-wider mb-1.5 flex items-center justify-between">
-                            <span class="flex items-center gap-1.5"><span>📱</span> Citizen SMS Emergency Bulletin</span>
+                            <span class="flex items-center gap-1.5">Citizen SMS Emergency Bulletin</span>
                             <span class="text-[10px] text-emerald-400 font-mono">AUTOMATED BROADCAST</span>
                         </div>
                         <div id="smsBroadcastText" class="text-xs p-3.5 rounded-xl bg-slate-950 text-slate-300 font-mono border border-slate-800/90 leading-relaxed">
@@ -909,7 +905,7 @@ HTML_DASHBOARD_TEMPLATE = """<!DOCTYPE html>
                 <div class="glass-panel rounded-2xl p-5 shadow-2xl">
                     <div class="flex items-center justify-between mb-4 pb-2 border-b border-slate-800">
                         <h3 class="text-sm font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
-                            <span>🤖</span> Layer 3: 4 Specialist Autonomous AI Agents
+                            Layer 3: 4 Specialist Autonomous AI Agents
                         </h3>
                         <span class="text-[11px] text-sky-400 font-mono font-semibold">BDI Cognitive Deliberation</span>
                     </div>
@@ -919,7 +915,6 @@ HTML_DASHBOARD_TEMPLATE = """<!DOCTYPE html>
                         <div class="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2">
                             <div class="flex items-center justify-between">
                                 <div class="font-bold text-xs text-white flex items-center gap-1.5">
-                                    <span>{{ ag.icon }}</span>
                                     <span>{{ ag.type }}</span>
                                 </div>
                                 <span class="text-xs font-mono font-bold text-sky-400">{{ (ag.risk_score * 100)|round|int }}%</span>
@@ -948,7 +943,7 @@ HTML_DASHBOARD_TEMPLATE = """<!DOCTYPE html>
                 <div class="glass-panel rounded-2xl p-5 shadow-2xl">
                     <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-800">
                         <h3 class="text-sm font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
-                            <span>📊</span> Live Open-Meteo & GloFAS Sensor Matrices
+                            Live Open-Meteo & GloFAS Sensor Matrices
                         </h3>
                         <span class="text-[10px] text-slate-400 font-mono" id="telemetryTimestamp">{{ init_data.timestamp }}</span>
                     </div>
@@ -987,7 +982,7 @@ HTML_DASHBOARD_TEMPLATE = """<!DOCTYPE html>
                     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-3">
                         <div>
                             <h3 class="text-sm font-bold uppercase tracking-wider text-white flex items-center gap-2">
-                                <span>🗺️</span> Real-Time Geospatial Tactical Risk & Evacuation Map
+                                Real-Time Geospatial Tactical Risk & Evacuation Map
                             </h3>
                             <p class="text-xs text-slate-400">Separates Civil Defense Population Center from Hydrological River Gauges</p>
                         </div>
@@ -1024,10 +1019,10 @@ HTML_DASHBOARD_TEMPLATE = """<!DOCTYPE html>
 
                     <div class="mt-2.5 flex flex-wrap items-center justify-between text-[11px] text-slate-400 px-1">
                         <div class="flex items-center gap-3">
-                            <span>🏢 <b>Civic Hub:</b> City Center</span>
-                            <span>🌊 <b>Gauge:</b> River Channel</span>
-                            <span>🟢 <b>Safe Haven:</b> High Ground</span>
-                            <span>⚠️ <b>Red Marker:</b> Flooded Camp</span>
+                            <span><span class="inline-block w-2 h-2 rounded-full bg-slate-400 mr-1"></span><b>Civic Hub:</b> City Center</span>
+                            <span><span class="inline-block w-2 h-2 rounded-full bg-sky-400 mr-1"></span><b>Gauge:</b> River Channel</span>
+                            <span><span class="inline-block w-2 h-2 rounded-full bg-emerald-400 mr-1"></span><b>Safe Haven:</b> High Ground</span>
+                            <span><span class="inline-block w-2 h-2 rounded-full bg-rose-500 mr-1"></span><b>Red Marker:</b> Flooded Camp</span>
                         </div>
                         <div class="font-mono text-slate-500">Esri Spaceborne Imagery &bull; Verified Dry Inland Ground</div>
                     </div>
@@ -1037,7 +1032,7 @@ HTML_DASHBOARD_TEMPLATE = """<!DOCTYPE html>
                 <div class="glass-panel rounded-2xl p-5 shadow-2xl">
                     <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-800">
                         <h3 class="text-sm font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
-                            <span>🧭</span> Suggestions & Evacuation Directives When Flood Occurs
+                            Suggestions & Evacuation Directives When Flood Occurs
                         </h3>
                         <span id="evacStatusBadge" class="text-xs px-2.5 py-0.5 rounded font-bold bg-slate-800 text-slate-300 font-mono">
                             {{ init_data.evacuation.evacuation_status }}
@@ -1054,7 +1049,7 @@ HTML_DASHBOARD_TEMPLATE = """<!DOCTYPE html>
                         <div class="col-span-2 p-4 rounded-xl bg-slate-900/80 border border-emerald-500/30 text-slate-200">
                             <div class="flex items-center justify-between mb-1.5">
                                 <span class="font-bold text-emerald-400 flex items-center gap-1.5">
-                                    <span>🟢</span> AREA VERIFIED SECURE &bull; DESIGNATED EMERGENCY SHELTER ON STANDBY
+                                    <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 mr-1"></span> AREA VERIFIED SECURE &bull; DESIGNATED EMERGENCY SHELTER ON STANDBY
                                 </span>
                                 {% if init_data.evacuation.active_shelter %}
                                 <span class="font-mono font-bold text-xs text-emerald-400">{{ init_data.evacuation.active_shelter.distance_km }} km away</span>
@@ -1071,7 +1066,7 @@ HTML_DASHBOARD_TEMPLATE = """<!DOCTYPE html>
                         {% elif init_data.assessment.severity == "MODERATE" and init_data.evacuation.active_shelter %}
                         <div class="col-span-2 p-4 rounded-xl bg-yellow-500/10 border border-yellow-500/30 text-slate-200">
                             <div class="flex items-center justify-between mb-1">
-                                <span class="font-bold text-yellow-400 flex items-center gap-1.5">🟡 NEAREST LOCAL RELIEF SPOT ALLOCATED</span>
+                                <span class="font-bold text-yellow-400 flex items-center gap-1.5"><span class="inline-block w-2 h-2 rounded-full bg-yellow-400 mr-1"></span> NEAREST LOCAL RELIEF SPOT ALLOCATED</span>
                                 <span class="font-mono font-bold text-xs text-yellow-400">{{ init_data.evacuation.active_shelter.distance_km }} km away</span>
                             </div>
                             <div class="text-sm font-bold text-white">{{ init_data.evacuation.active_shelter.name }}</div>
@@ -1080,19 +1075,19 @@ HTML_DASHBOARD_TEMPLATE = """<!DOCTYPE html>
                         </div>
                         {% elif init_data.evacuation.is_diverted and init_data.evacuation.primary_camp and init_data.evacuation.alternative_haven %}
                         <div class="p-3.5 rounded-xl bg-red-500/10 border border-red-500/30 text-slate-200 opacity-80">
-                            <div class="text-red-400 font-bold mb-0.5 text-xs flex items-center gap-1">⚠️ PRIMARY CAMP: COMPROMISED & FLOODED</div>
+                            <div class="text-red-400 font-bold mb-0.5 text-xs flex items-center gap-1"><span class="inline-block w-2 h-2 rounded-full bg-rose-500 mr-1"></span> PRIMARY CAMP: COMPROMISED & FLOODED</div>
                             <div class="font-bold text-white text-xs">{{ init_data.evacuation.primary_camp.name }}</div>
                             <div class="text-[11px] text-red-300/80 mt-1">Inundation perimeter covers access roads. <b>DO NOT ENTER!</b></div>
                         </div>
                         <div class="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/40 text-slate-200 shadow-lg shadow-emerald-500/10">
-                            <div class="text-emerald-400 font-bold mb-0.5 text-xs flex items-center gap-1">🟢 ALTERNATIVE HIGH-GROUND HAVEN (DIVERTED)</div>
+                            <div class="text-emerald-400 font-bold mb-0.5 text-xs flex items-center gap-1"><span class="inline-block w-2 h-2 rounded-full bg-emerald-400 mr-1"></span> ALTERNATIVE HIGH-GROUND HAVEN (DIVERTED)</div>
                             <div class="font-bold text-white text-xs">{{ init_data.evacuation.alternative_haven.name }}</div>
                             <div class="text-[11px] text-emerald-300 mt-1">Elevation: {{ init_data.evacuation.alternative_haven.elevation_m }}m ASL (+16m higher) &bull; Capacity: {{ "{:,}".format(init_data.evacuation.alternative_haven.capacity) }}</div>
                         </div>
                         {% elif init_data.evacuation.primary_camp %}
                         <div class="col-span-2 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-slate-200">
                             <div class="flex items-center justify-between mb-1">
-                                <span class="font-bold text-emerald-400 flex items-center gap-1.5">🟢 PRIMARY RELIEF CAMP (OUTSIDE FLOOD ZONE)</span>
+                                <span class="font-bold text-emerald-400 flex items-center gap-1.5"><span class="inline-block w-2 h-2 rounded-full bg-emerald-400 mr-1"></span> PRIMARY RELIEF CAMP (OUTSIDE FLOOD ZONE)</span>
                                 <span class="font-mono font-bold text-xs text-emerald-400">{{ init_data.evacuation.primary_camp.distance_km }} km</span>
                             </div>
                             <div class="text-sm font-bold text-white">{{ init_data.evacuation.primary_camp.name }}</div>
@@ -1104,7 +1099,7 @@ HTML_DASHBOARD_TEMPLATE = """<!DOCTYPE html>
                     <!-- Tactical Suggestions Checklist -->
                     <div class="mt-4 pt-3.5 border-t border-slate-800">
                         <div class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                            <span>⚡</span> Tactical Civil Defense Recommendations:
+                            Tactical Civil Defense Recommendations:
                         </div>
                         <div class="space-y-1.5 text-xs text-slate-300">
                             {% for act in init_data.decision.tactical_actions %}
@@ -1126,7 +1121,7 @@ HTML_DASHBOARD_TEMPLATE = """<!DOCTYPE html>
             <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
                 <div>
                     <h3 class="text-base font-extrabold text-white flex items-center gap-2">
-                        <span>🛡️</span> Citizen Flood Safety Precautions & Survival Protocols (Do's & Don'ts)
+                        Citizen Flood Safety Precautions & Survival Protocols (Do's & Don'ts)
                     </h3>
                     <p class="text-xs text-slate-400">Standard NDMA & Civil Defense Life-Saving Guidelines for Flood Emergencies</p>
                 </div>
@@ -1142,7 +1137,7 @@ HTML_DASHBOARD_TEMPLATE = """<!DOCTYPE html>
                     <div>
                         <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-800">
                             <span class="font-black text-sm text-sky-400 flex items-center gap-1.5">
-                                <span>1️⃣</span> BEFORE FLOOD (PREPARE)
+                                BEFORE FLOOD (PREPARE)
                             </span>
                             <span class="text-[10px] bg-sky-500/10 text-sky-400 px-2 py-0.5 rounded font-mono">Stage 1</span>
                         </div>
@@ -1175,7 +1170,7 @@ HTML_DASHBOARD_TEMPLATE = """<!DOCTYPE html>
                     <div>
                         <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-800">
                             <span class="font-black text-sm text-amber-400 flex items-center gap-1.5">
-                                <span>2️⃣</span> DURING FLOOD (SURVIVE)
+                                DURING FLOOD (SURVIVE)
                             </span>
                             <span class="text-[10px] bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded font-mono">Stage 2</span>
                         </div>
@@ -1208,7 +1203,7 @@ HTML_DASHBOARD_TEMPLATE = """<!DOCTYPE html>
                     <div>
                         <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-800">
                             <span class="font-black text-sm text-emerald-400 flex items-center gap-1.5">
-                                <span>3️⃣</span> AFTER FLOOD (RECOVER)
+                                AFTER FLOOD (RECOVER)
                             </span>
                             <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded font-mono">Stage 3</span>
                         </div>
@@ -1244,7 +1239,7 @@ HTML_DASHBOARD_TEMPLATE = """<!DOCTYPE html>
             <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-800">
                 <div>
                     <h3 class="text-base font-extrabold text-white flex items-center gap-2">
-                        <span>📞</span> Official National & State Civil Defense Emergency Directory
+                        Official National & State Civil Defense Emergency Directory
                     </h3>
                     <p class="text-xs text-slate-400">24x7 Toll-Free Government Rescue & Emergency Response Helplines</p>
                 </div>
@@ -1256,42 +1251,42 @@ HTML_DASHBOARD_TEMPLATE = """<!DOCTYPE html>
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
                 
                 <a href="tel:1078" class="p-3.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-red-500/50 transition-all text-center group cursor-pointer block">
-                    <div class="text-2xl mb-1">🚨</div>
+                    <div class="text-xs font-mono font-bold text-red-400 uppercase tracking-wider mb-1">[RESCUE]</div>
                     <div class="text-[10px] text-slate-400 font-bold uppercase">NDRF Rescue</div>
                     <div class="text-lg font-black font-mono text-red-400 group-hover:scale-105 transition-transform mt-0.5">1078</div>
                     <div class="text-[9px] text-slate-500 mt-1">National Force</div>
                 </a>
 
                 <a href="tel:1070" class="p-3.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-blue-500/50 transition-all text-center group cursor-pointer block">
-                    <div class="text-2xl mb-1">🛡️</div>
+                    <div class="text-xs font-mono font-bold text-blue-400 uppercase tracking-wider mb-1">[SDMA]</div>
                     <div class="text-[10px] text-slate-400 font-bold uppercase">State SDMA</div>
                     <div class="text-lg font-black font-mono text-blue-400 group-hover:scale-105 transition-transform mt-0.5">1070</div>
                     <div class="text-[9px] text-slate-500 mt-1">State Control</div>
                 </a>
 
                 <a href="tel:1077" class="p-3.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-amber-500/50 transition-all text-center group cursor-pointer block">
-                    <div class="text-2xl mb-1">🏛️</div>
+                    <div class="text-xs font-mono font-bold text-amber-400 uppercase tracking-wider mb-1">[DDMA]</div>
                     <div class="text-[10px] text-slate-400 font-bold uppercase">District DDMA</div>
                     <div class="text-lg font-black font-mono text-amber-400 group-hover:scale-105 transition-transform mt-0.5">1077</div>
                     <div class="text-[9px] text-slate-500 mt-1">Collectorate</div>
                 </a>
 
                 <a href="tel:112" class="p-3.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/50 transition-all text-center group cursor-pointer block">
-                    <div class="text-2xl mb-1">🆘</div>
+                    <div class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider mb-1">[ERSS]</div>
                     <div class="text-[10px] text-slate-400 font-bold uppercase">National ERSS</div>
                     <div class="text-lg font-black font-mono text-emerald-400 group-hover:scale-105 transition-transform mt-0.5">112</div>
                     <div class="text-[9px] text-slate-500 mt-1">All Emergencies</div>
                 </a>
 
                 <a href="tel:108" class="p-3.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-teal-500/50 transition-all text-center group cursor-pointer block">
-                    <div class="text-2xl mb-1">🚑</div>
+                    <div class="text-xs font-mono font-bold text-teal-400 uppercase tracking-wider mb-1">[MEDICAL]</div>
                     <div class="text-[10px] text-slate-400 font-bold uppercase">Ambulance</div>
                     <div class="text-lg font-black font-mono text-teal-400 group-hover:scale-105 transition-transform mt-0.5">108</div>
                     <div class="text-[9px] text-slate-500 mt-1">Medical Trauma</div>
                 </a>
 
                 <a href="tel:101" class="p-3.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-rose-500/50 transition-all text-center group cursor-pointer block">
-                    <div class="text-2xl mb-1">🚒</div>
+                    <div class="text-xs font-mono font-bold text-rose-400 uppercase tracking-wider mb-1">[FIRE]</div>
                     <div class="text-[10px] text-slate-400 font-bold uppercase">Fire & Rescue</div>
                     <div class="text-lg font-black font-mono text-rose-400 group-hover:scale-105 transition-transform mt-0.5">101</div>
                     <div class="text-[9px] text-slate-500 mt-1">Boat Rescue</div>
@@ -1316,16 +1311,7 @@ HTML_DASHBOARD_TEMPLATE = """<!DOCTYPE html>
         </main>
 
     <!-- Footer -->
-    <footer class="glass-panel mt-8 py-5 px-6 text-center text-xs text-slate-500 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 max-w-[1650px] w-full mx-auto">
-        <div>
-            FloodGuard AI &bull; Autonomous Multi-Agent AI System for Disaster Prediction
-        </div>
-        <div class="flex items-center gap-4 text-slate-400">
-            <span>Alliance College of Engineering and Design</span>
-            <span>&bull;</span>
-            <span>Design Project I</span>
-        </div>
-    </footer>
+    
 
     <!-- Client-Side Real-Time Interaction Script -->
     <script>
@@ -1358,7 +1344,7 @@ HTML_DASHBOARD_TEMPLATE = """<!DOCTYPE html>
                 if (text) text.innerText = 'Evaluating live telemetry & flood risk for ' + cityName + '...';
             }
             var btn = document.getElementById('searchBtn');
-            if (btn) btn.innerHTML = "<span>⚡ Ingesting...</span>";
+            if (btn) btn.innerHTML = "<span>Ingesting...</span>";
         }
 
         // Form Submit Handler
