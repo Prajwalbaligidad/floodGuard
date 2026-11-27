@@ -740,8 +740,16 @@
         function loadForecast() {
             var city = '';
             var inp = document.getElementById('locationInput');
-            if (inp) city = inp.value.trim();
-            if (!city) city = 'Guwahati';
+            if (inp && inp.value && inp.value.trim()) {
+                city = inp.value.trim();
+            }
+            if (!city) {
+                var urlParams = new URLSearchParams(window.location.search);
+                city = urlParams.get('location') || '';
+            }
+            if (!city) {
+                city = (window._initLocation || 'Guwahati').trim();
+            }
 
             var btn     = document.getElementById('forecastBtn');
             var btnText = document.getElementById('forecastBtnText');
@@ -750,7 +758,7 @@
             var errBox  = document.getElementById('forecastError');
 
             if (btn) btn.disabled = true;
-            if (btnText) btnText.innerText = 'Fetching...';
+            if (btnText) btnText.innerText = 'Calculating 72h...';
             if (loading) loading.classList.remove('hidden');
             if (results) results.classList.add('hidden');
             if (errBox)  errBox.classList.add('hidden');
@@ -763,7 +771,7 @@
                     if (btnText) btnText.innerText = 'Refresh Forecast';
                     if (!d.success) {
                         if (errBox) {
-                            errBox.innerText = d.error || 'Forecast unavailable.';
+                            errBox.innerText = d.error || 'Forecast data unavailable.';
                             errBox.classList.remove('hidden');
                         }
                         return;
