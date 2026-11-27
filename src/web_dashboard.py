@@ -437,6 +437,159 @@ def api_sweep():
 
     return jsonify({"success": True, "results": results})
 
+# -------------------------------------------------------------
+# 3-Day Flood Forecast Endpoint
+# -------------------------------------------------------------
+@app.route("/api/forecast", methods=["GET"])
+def api_forecast():
+    """
+    Fetches Open-Meteo 3-day hourly forecast for a location and runs
+    physics-grounded risk scoring (mirroring the multi-agent RF logic) on
+    each hour to produce a 72-hour flood risk timeline with 6-hour windows.
+    """
+    import requests as _req
+    from datetime import datetime
+
+    location = request.args.get("location", "Guwahati").strip()
+    service = LiveDataService()
+    geo = service.geocode(location)
+    if not geo.get("found"):
+        return jsonify({"success": False, "error": f"Location \'{location}\' not found."}), 404
+
+    lat   = geo["latitude"]
+    lon   = geo["longitude"]
+    city  = geo["name"]
+    state = geo.get("state", "")
+    river = geo.get("river", "River Basin")
+
+    # Fetch 3-day hourly forecast from Open-Meteo
+    forecast_url    = "https://api.open-meteo.com/v1/forecast"
+    forecast_params = {
+        "latitude":  lat,
+        "longitude": lon,
+        "hourly": (
+            "precipitation,rain,relative_humidity_2m,"
+            "surface_pressure,wind_speed_10m,wind_gusts_10m,"
+            "cloud_cover,soil_moisture_0_to_7cm"
+        ),
+        "forecast_days": 3,
+        "timezone": "Asia/Kolkata"
+    }
+    headers = {"User-Agent": "FloodGuardAI/2.0-forecast-academic"}
+
+    try:
+        resp = _req.get(forecast_url, params=forecast_params, headers=headers, timeout=10)
+        resp.raise_for_status()
+        raw = resp.json()
+    except Exception as exc:
+        return jsonify({"success": False, "error": f"Open-Meteo API error: {exc}"}), 502
+
+    hourly      = raw.get("hourly", {})
+    times       = hourly.get("time", [])
+    precip      = hourly.get("precipitation", [])
+    humidity    = hourly.get("relative_humidity_2m", [])
+    pressure    = hourly.get("surface_pressure", [])
+    wind_gusts  = hourly.get("wind_gusts_10m", [])
+    soil_moist  = hourly.get("soil_moisture_0_to_7cm", [])
+
+    n = min(len(times), 72)   # 72 hours = 3 days
+
+    def compute_hour_risk(rain_mmh, cum_6h, sm, hum, pres_drop, wg):
+        r_rain = min(1.0, rain_mmh / 65.0)
+        r_cum  = min(1.0, cum_6h   / 150.0)
+        r_soil = min(1.0, (sm or 0.2) / 0.5)
+        r_hum  = min(1.0, max(0.0, (hum - 60.0) / 40.0))
+        r_pres = min(1.0, (pres_drop or 0.0) / 10.0)
+        r_gust = min(1.0, (wg or 0.0) / 80.0)
+        composite = (
+            0.38 * r_rain + 0.25 * r_cum  + 0.18 * r_soil +
+            0.08 * r_hum  + 0.07 * r_pres + 0.04 * r_gust
+        )
+        if rain_mmh > 50.0:
+            composite = max(composite, 0.90)
+        return round(min(1.0, composite), 4)
+
+    def risk_to_tier(s):
+        if s >= 0.70: return "CRITICAL"
+        if s >= 0.45: return "HIGH"
+        if s >= 0.20: return "MODERATE"
+        return "LOW"
+
+    def tier_color(t):
+        return {"CRITICAL": "#ef4444", "HIGH": "#f97316",
+                "MODERATE": "#eab308", "LOW": "#10b981"}.get(t, "#64748b")
+
+    hourly_timeline = []
+    for i in range(n):
+        rain_mmh = float(precip[i]) if i < len(precip) else 0.0
+        cum_6h   = sum(float(precip[j]) for j in range(max(0, i-5), i+1) if j < len(precip))
+        sm       = float(soil_moist[i]) if (i < len(soil_moist) and soil_moist[i] is not None) else 0.2
+        hum      = float(humidity[i])   if i < len(humidity)  else 65.0
+        wg       = float(wind_gusts[i]) if i < len(wind_gusts) else 10.0
+        pres_now  = float(pressure[i])   if i < len(pressure)  else 1010.0
+        pres_prev = float(pressure[i-3]) if (i >= 3 and i-3 < len(pressure)) else pres_now
+        pres_drop = max(0.0, pres_prev - pres_now)
+        risk  = compute_hour_risk(rain_mmh, cum_6h, sm, hum, pres_drop, wg)
+        tier  = risk_to_tier(risk)
+        hourly_timeline.append({
+            "time": times[i] if i < len(times) else "",
+            "rain_mmh":   round(rain_mmh, 2),
+            "cum_6h_mm":  round(cum_6h, 2),
+            "soil_moist": round(sm, 3),
+            "humidity":   round(hum, 1),
+            "risk_score": risk,
+            "tier":       tier,
+            "color":      tier_color(tier)
+        })
+
+    windows = []
+    for w in range(0, min(n, 72), 6):
+        wh = hourly_timeline[w:w+6]
+        if not wh: continue
+        peak_risk   = max(h["risk_score"] for h in wh)
+        peak_rain   = max(h["rain_mmh"]   for h in wh)
+        total_rain  = sum(h["rain_mmh"]   for h in wh)
+        peak_tier   = risk_to_tier(peak_risk)
+        label_time  = wh[0]["time"]
+        try:
+            dt        = datetime.fromisoformat(label_time)
+            label     = dt.strftime("%d %b %H:%M")
+            day_label = dt.strftime("%A, %d %b")
+        except Exception:
+            label = day_label = label_time
+        windows.append({
+            "window_start":  label_time,
+            "label":         label,
+            "day":           day_label,
+            "peak_risk":     round(peak_risk, 4),
+            "peak_rain_mmh": round(peak_rain, 2),
+            "total_rain_mm": round(total_rain, 2),
+            "tier":          peak_tier,
+            "color":         tier_color(peak_tier)
+        })
+
+    all_scores = [h["risk_score"] for h in hourly_timeline]
+    max_risk   = max(all_scores) if all_scores else 0.0
+    avg_risk   = round(sum(all_scores) / len(all_scores), 4) if all_scores else 0.0
+    peak_hour  = hourly_timeline[all_scores.index(max_risk)] if all_scores else {}
+
+    return jsonify({
+        "success":  True,
+        "location": {"name": city, "state": state, "river": river, "lat": lat, "lon": lon},
+        "forecast_horizon_hours": n,
+        "summary": {
+            "max_risk_score": round(max_risk, 4),
+            "avg_risk_score": avg_risk,
+            "peak_tier":      risk_to_tier(max_risk),
+            "peak_color":     tier_color(risk_to_tier(max_risk)),
+            "peak_window":    peak_hour.get("time", "")
+        },
+        "windows":         windows,
+        "hourly_timeline": hourly_timeline
+    })
+
+
+
 
 # -------------------------------------------------------------
 # Frontend Dashboard View

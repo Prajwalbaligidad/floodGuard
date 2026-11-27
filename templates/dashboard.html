@@ -614,6 +614,59 @@
             </div>
         </div>
 
+        <!-- ============================================================ -->
+        <!-- 3-DAY FLOOD FORECAST SECTION                                 -->
+        <!-- ============================================================ -->
+        <section class="max-w-[1650px] w-full mx-auto px-4 lg:px-8 mt-10 mb-6">
+            <div class="glass-panel rounded-2xl p-6 border border-slate-700/60">
+                <!-- Header row -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center text-white text-lg shadow-lg shadow-indigo-500/20">&#x1F52E;</div>
+                        <div>
+                            <h2 class="text-base font-black text-white tracking-tight">3-Day Flood Risk Forecast</h2>
+                            <p class="text-xs text-slate-400 mt-0.5">72-hour multi-agent risk projection &bull; Live Open-Meteo forecast telemetry</p>
+                        </div>
+                    </div>
+                    <button onclick="loadForecast()" id="forecastBtn"
+                        class="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold transition-all shadow-lg shadow-indigo-500/20 active:scale-95">
+                        <span id="forecastBtnIcon">&#9889;</span>
+                        <span id="forecastBtnText">Load 3-Day Forecast</span>
+                    </button>
+                </div>
+
+                <!-- Loading state -->
+                <div id="forecastLoading" class="hidden text-center py-10">
+                    <div class="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
+                    <p class="text-sm text-slate-400">Fetching 72-hour forecast from Open-Meteo&#8230;</p>
+                </div>
+
+                <!-- Error state -->
+                <div id="forecastError" class="hidden p-4 rounded-xl bg-red-900/30 border border-red-700/50 text-red-300 text-sm"></div>
+
+                <!-- Results -->
+                <div id="forecastResults" class="hidden">
+                    <!-- Summary strip -->
+                    <div id="forecastSummary" class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6"></div>
+
+                    <!-- 6-hour window cards -->
+                    <div class="mb-5">
+                        <p class="text-xs text-slate-500 uppercase tracking-widest font-bold mb-3">6-Hour Risk Windows</p>
+                        <div id="forecastWindows" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2.5"></div>
+                    </div>
+
+                    <!-- Risk bar chart -->
+                    <div>
+                        <p class="text-xs text-slate-500 uppercase tracking-widest font-bold mb-3">Hourly Risk Timeline</p>
+                        <div id="forecastChart" class="flex items-end gap-px h-24 bg-slate-900/60 rounded-xl px-3 pt-3 pb-2 overflow-x-auto"></div>
+                        <div class="flex justify-between text-[10px] text-slate-600 font-mono mt-1 px-1">
+                            <span>Now</span><span>+12h</span><span>+24h</span><span>+36h</span><span>+48h</span><span>+60h</span><span>+72h</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         </main>
 
     <!-- Footer -->
@@ -682,6 +735,112 @@
             window.location.href = "/?location=" + encodeURIComponent(city);
         }
 
-    </script>
+    
+        // ---- 3-Day Forecast Logic ----
+        function loadForecast() {
+            var city = '';
+            var inp = document.getElementById('locationInput');
+            if (inp) city = inp.value.trim();
+            if (!city) city = 'Guwahati';
+
+            var btn     = document.getElementById('forecastBtn');
+            var btnText = document.getElementById('forecastBtnText');
+            var loading = document.getElementById('forecastLoading');
+            var results = document.getElementById('forecastResults');
+            var errBox  = document.getElementById('forecastError');
+
+            if (btn) btn.disabled = true;
+            if (btnText) btnText.innerText = 'Fetching...';
+            if (loading) loading.classList.remove('hidden');
+            if (results) results.classList.add('hidden');
+            if (errBox)  errBox.classList.add('hidden');
+
+            fetch('/api/forecast?location=' + encodeURIComponent(city))
+                .then(function(r){ return r.json(); })
+                .then(function(d){
+                    if (loading) loading.classList.add('hidden');
+                    if (btn) btn.disabled = false;
+                    if (btnText) btnText.innerText = 'Refresh Forecast';
+                    if (!d.success) {
+                        if (errBox) {
+                            errBox.innerText = d.error || 'Forecast unavailable.';
+                            errBox.classList.remove('hidden');
+                        }
+                        return;
+                    }
+                    renderForecast(d);
+                    if (results) results.classList.remove('hidden');
+                })
+                .catch(function(e){
+                    if (loading) loading.classList.add('hidden');
+                    if (btn) btn.disabled = false;
+                    if (btnText) btnText.innerText = 'Retry Forecast';
+                    if (errBox) {
+                        errBox.innerText = 'Network error: ' + e.message;
+                        errBox.classList.remove('hidden');
+                    }
+                });
+        }
+
+        function renderForecast(d) {
+            var sum = d.summary;
+            var loc = d.location;
+            var pColor = sum.peak_color || '#64748b';
+
+            var summaryEl = document.getElementById('forecastSummary');
+            if (summaryEl) {
+                summaryEl.innerHTML =
+                    '<div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 text-center">' +
+                    '<div class="text-[10px] text-slate-500 uppercase tracking-widest mb-1">Location</div>' +
+                    '<div class="text-sm font-black text-white">' + loc.name + '</div>' +
+                    '<div class="text-xs text-slate-400">' + (loc.river || '') + '</div></div>' +
+                    '<div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 text-center">' +
+                    '<div class="text-[10px] text-slate-500 uppercase tracking-widest mb-1">Peak Risk Tier</div>' +
+                    '<div class="text-lg font-black" style="color:' + pColor + '">' + sum.peak_tier + '</div>' +
+                    '<div class="text-xs text-slate-400">72-hour peak</div></div>' +
+                    '<div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 text-center">' +
+                    '<div class="text-[10px] text-slate-500 uppercase tracking-widest mb-1">Peak Score</div>' +
+                    '<div class="text-lg font-black text-white font-mono">' + (sum.max_risk_score * 100).toFixed(1) + '%</div>' +
+                    '<div class="text-xs text-slate-400">Avg: ' + (sum.avg_risk_score * 100).toFixed(1) + '%</div></div>' +
+                    '<div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 text-center">' +
+                    '<div class="text-[10px] text-slate-500 uppercase tracking-widest mb-1">Peak Window</div>' +
+                    '<div class="text-sm font-black text-indigo-300 font-mono">' +
+                    (sum.peak_window ? sum.peak_window.replace("T", " ").slice(0, 16) : "--") +
+                    '</div><div class="text-xs text-slate-400">IST</div></div>';
+            }
+
+            var winEl = document.getElementById('forecastWindows');
+            if (winEl && d.windows) {
+                winEl.innerHTML = d.windows.map(function(w) {
+                    var bg = w.tier === 'CRITICAL' ? 'bg-red-950/60 border-red-700/40' :
+                             w.tier === 'HIGH'     ? 'bg-orange-950/60 border-orange-700/40' :
+                             w.tier === 'MODERATE' ? 'bg-yellow-950/60 border-yellow-700/40' :
+                                                     'bg-emerald-950/60 border-emerald-700/40';
+                    return '<div class="p-3 rounded-xl ' + bg + ' border text-center">' +
+                        '<div class="text-[10px] text-slate-400 font-mono mb-1">' + w.label + '</div>' +
+                        '<div class="text-sm font-black" style="color:' + w.color + '">' + w.tier + '</div>' +
+                        '<div class="text-xs font-mono text-white mt-1">' + (w.peak_risk * 100).toFixed(0) + '%</div>' +
+                        '<div class="text-[10px] text-slate-500 mt-0.5">' + w.total_rain_mm.toFixed(1) + 'mm</div></div>';
+                }).join('');
+            }
+
+            var chartEl = document.getElementById('forecastChart');
+            if (chartEl && d.hourly_timeline) {
+                chartEl.innerHTML = d.hourly_timeline.map(function(h) {
+                    var pct  = Math.round(h.risk_score * 100);
+                    var barH = Math.max(3, Math.round(pct * 0.76));
+                    return '<div class="flex flex-col items-center justify-end flex-1 group relative" style="min-width:5px;">' +
+                        '<div class="absolute bottom-full mb-1 text-[9px] font-mono text-white bg-slate-800 px-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 whitespace-nowrap">' +
+                        (h.time ? h.time.slice(5,16).replace("T"," ") : "") + " | " + pct + "% " + h.tier + "</div>" +
+                        '<div style="height:' + barH + 'px;background:' + h.color + ';" class="w-full rounded-t opacity-80 group-hover:opacity-100 transition-opacity"></div></div>';
+                }).join('');
+            }
+        }
+
+        window.addEventListener('load', function() {
+            setTimeout(loadForecast, 1500);
+        });
+
+</script>
 </body>
 </html>
